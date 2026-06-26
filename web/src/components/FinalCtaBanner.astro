@@ -26,7 +26,7 @@ const isPremium = variant === "premium";
       ></div>
       <div
         class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full opacity-20 pointer-events-none"
-        style="background: #0F2010"
+        style="background: #0B0B0B"
         aria-hidden="true"
       ></div>
     </>
@@ -60,7 +60,7 @@ const isPremium = variant === "premium";
       {/* Urgency message */}
       <div
         class="inline-block mb-8 px-4 py-2 rounded-lg font-semibold text-sm"
-        style={`background: ${isPremium ? "rgba(122, 201, 67, 0.1)" : "rgba(0,0,0,0.1)"}; color: ${isPremium ? "#72CD00" : "#0F2010"}`}
+        style={`background: ${isPremium ? "rgba(122, 201, 67, 0.1)" : "rgba(0,0,0,0.1)"}; color: ${isPremium ? "#72CD00" : "#0B0B0B"}`}
         role="alert"
         aria-live="polite"
       >
@@ -94,11 +94,11 @@ const isPremium = variant === "premium";
         style="font-family: 'Inter', sans-serif"
       >
         <div className="flex items-center gap-2">
-          <CheckCircle size={14} style={{ color: isPremium ? "#72CD00" : "#0F2010" }} />
+          <CheckCircle size={14} style={{ color: isPremium ? "#72CD00" : "#0B0B0B" }} />
           <span>Réponse garantie sous 48h</span>
         </div>
         <div className="flex items-center gap-2">
-          <CheckCircle size={14} style={{ color: isPremium ? "#72CD00" : "#0F2010" }} />
+          <CheckCircle size={14} style={{ color: isPremium ? "#72CD00" : "#0B0B0B" }} />
           <span>Diplômes reconnus par l'État</span>
         </div>
       </div>

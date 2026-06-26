@@ -90,13 +90,9 @@ export function Hero() {
               {/* Main card */}
               <div className="bg-white rounded-2xl p-6 shadow-2xl">
                 <img
-                  src="https://source.unsplash.com/600x400/?school,students,africa"
+                  src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80"
                   alt="Étudiants du Groupe CERIN sur le campus d'Abidjan"
                   className="w-full h-56 object-cover rounded-xl mb-4"
-                  onError={(e) => {
-                    e.currentTarget.src = "/images/placeholder.svg";
-                    e.currentTarget.onerror = null;
-                  }}
                 />
                 <div className="flex items-center justify-between">
                   <div>

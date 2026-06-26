@@ -10,6 +10,12 @@ const G = "#7AC943";
 const Y = "#F4D000";
 const BG = "#F5F6F8";
 
+const heroImages = [
+  'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80'
+];
+
 const steps = [
   { title: "Choisissez votre formation", desc: "Parcourez nos programmes du collège au Master et sélectionnez celui qui correspond à votre projet.", icon: BookOpen },
   { title: "Remplissez le formulaire", desc: "Renseignez vos informations personnelles, votre parcours et vos motivations en ligne.", icon: GraduationCap },
@@ -48,7 +54,8 @@ function getProgramLevel(program: any) {
     <PageHero
       title="Inscription"
       subtitle="Rejoignez le Groupe CERIN et construisez votre avenir académique en quelques étapes simples."
-      image="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80"
+      images={heroImages}
+      useSlider={true}
       breadcrumbs={[{ label: "Inscription" }]}
       accent={Y}
     />
@@ -68,15 +75,20 @@ function getProgramLevel(program: any) {
         </div>
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
-          {steps.map((s) => {
+          {steps.map((s, index) => {
             const Icon = s.icon;
             return (
-              <div class="bg-white p-6 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow" style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.05)" }}>
-                <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: "#F0FAF0" }}>
-                  <Icon size={24} style={{ color: G }} />
+              <div class="group bg-white p-6 rounded-2xl border-2 border-transparent hover:border-[#72CD00] hover:shadow-xl transition-all duration-300 hover:-translate-y-2" style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.05)" }}>
+                <div class="relative">
+                  <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110" style={{ background: `linear-gradient(135deg, ${G} 0%, #5BA832 100%)`, boxShadow: `0 8px 24px rgba(122, 201, 67, 0.3)` }}>
+                    <Icon size={28} class="text-white" />
+                  </div>
+                  <div class="absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white" style={{ background: Y, color: '#0B0B0B' }}>
+                    {index + 1}
+                  </div>
                 </div>
                 <h3 class="text-lg font-bold text-gray-900 mb-2" style="font-family: 'Poppins', sans-serif">{s.title}</h3>
-                <p class="text-sm text-gray-600" style="font-family: 'Inter', sans-serif">{s.desc}</p>
+                <p class="text-sm text-gray-600 leading-relaxed" style="font-family: 'Inter', sans-serif">{s.desc}</p>
               </div>
             );
           })}
@@ -93,12 +105,17 @@ function getProgramLevel(program: any) {
             <div class="space-y-4">
               {(programs?.length || 0) > 0 ? (
                 programs!.slice(0, 4).map((p: any) => (
-                  <a href="/formations/enseignement-superieur" class="flex items-center justify-between p-4 rounded-xl border border-gray-200 hover:border-green-300 hover:shadow-md transition-all bg-white">
-                    <div>
-                      <p class="font-bold text-gray-900" style="font-family: 'Poppins', sans-serif">{getProgramLevel(p)}</p>
-                      <p class="text-xs text-gray-500" style="font-family: 'Inter', sans-serif">{p.duration}</p>
+                  <a href="/formations/enseignement-superieur" class="group flex items-center justify-between p-5 rounded-xl border-2 border-gray-100 hover:border-[#72CD00] hover:shadow-lg transition-all bg-white">
+                    <div class="flex items-center gap-4">
+                      <div class="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: "#F0FAF0" }}>
+                        <BookOpen size={20} style={{ color: G }} />
+                      </div>
+                      <div>
+                        <p class="font-bold text-gray-900 group-hover:text-[#72CD00] transition-colors" style="font-family: 'Poppins', sans-serif">{getProgramLevel(p)}</p>
+                        <p class="text-xs text-gray-500" style="font-family: 'Inter', sans-serif">{p.duration}</p>
+                      </div>
                     </div>
-                    <span class="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: "#F0FAF0", color: G }}>Disponible</span>
+                    <span class="px-4 py-1.5 rounded-full text-xs font-semibold transition-all group-hover:scale-105" style={{ background: "#F0FAF0", color: G }}>Disponible</span>
                   </a>
                 ))
               ) : (
@@ -108,12 +125,17 @@ function getProgramLevel(program: any) {
                   { level: "Licence / Bachelor", cycle: "Bac +3", tag: "Supérieur" },
                   { level: "Master", cycle: "Bac +5", tag: "Expertise" },
                 ].map((p) => (
-                  <a href="/formations/enseignement-superieur" class="flex items-center justify-between p-4 rounded-xl border border-gray-200 hover:border-green-300 hover:shadow-md transition-all bg-white">
-                    <div>
-                      <p class="font-bold text-gray-900" style="font-family: 'Poppins', sans-serif">{p.level}</p>
-                      <p class="text-xs text-gray-500" style="font-family: 'Inter', sans-serif">{p.cycle}</p>
+                  <a href="/formations/enseignement-superieur" class="group flex items-center justify-between p-5 rounded-xl border-2 border-gray-100 hover:border-[#72CD00] hover:shadow-lg transition-all bg-white">
+                    <div class="flex items-center gap-4">
+                      <div class="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: "#F0FAF0" }}>
+                        <BookOpen size={20} style={{ color: G }} />
+                      </div>
+                      <div>
+                        <p class="font-bold text-gray-900 group-hover:text-[#72CD00] transition-colors" style="font-family: 'Poppins', sans-serif">{p.level}</p>
+                        <p class="text-xs text-gray-500" style="font-family: 'Inter', sans-serif">{p.cycle}</p>
+                      </div>
                     </div>
-                    <span class="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: "#F0FAF0", color: G }}>{p.tag}</span>
+                    <span class="px-4 py-1.5 rounded-full text-xs font-semibold transition-all group-hover:scale-105" style={{ background: "#F0FAF0", color: G }}>{p.tag}</span>
                   </a>
                 ))
               )}

@@ -61,7 +61,7 @@ export function TestimonialCard({ testimonial, isActive = false }: { testimonial
           className="w-14 h-14 rounded-full object-cover border-2"
           style={{ borderColor: "#2EA82A" }}
          onError={(e) => {
-      e.currentTarget.src = '/images/placeholder.svg';
+      e.currentTarget.src = 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80';
     e.currentTarget.onerror = null;
   }} />
         <div>

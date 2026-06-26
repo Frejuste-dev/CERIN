@@ -42,7 +42,7 @@ export function ProgramCardEnhanced({
             alt={`Image du programme ${title}`}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
            onError={(e) => {
-    e.currentTarget.src = '/images/placeholder.svg';
+    e.currentTarget.src = 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80';
     e.currentTarget.onerror = null;
   }} />
 

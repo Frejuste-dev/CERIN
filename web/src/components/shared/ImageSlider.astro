@@ -1,0 +1,246 @@
+---
+interface Props {
+  images: string[];
+  interval?: number;
+  showDots?: boolean;
+  showArrows?: boolean;
+}
+
+const { 
+  images = [], 
+  interval = 5000, 
+  showDots = true,
+  showArrows = true 
+} = Astro.props;
+
+const G = "#7AC943";
+---
+
+<div class="relative w-full h-full overflow-hidden rounded-2xl image-slider-container">
+  <!-- Slides -->
+  <div class="relative w-full h-full">
+    {images.map((img, index) => (
+      <div
+        class={`absolute inset-0 transition-opacity duration-700 ease-in-out slide ${index === 0 ? 'opacity-100' : 'opacity-0'}`}
+        data-index={index}
+      >
+        <img
+          src={img}
+          alt={`Slide ${index + 1}`}
+          class="w-full h-full object-cover"
+          onerror="this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80'; this.onerror=null;"
+        />
+        <!-- Overlay gradient -->
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+      </div>
+    ))}
+  </div>
+
+  <!-- Navigation Arrows -->
+  {showArrows && images.length > 1 && (
+    <>
+      <button
+        class="slider-prev absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-all duration-300 hover:scale-110 z-20"
+        aria-label="Image précédente"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ color: G }}>
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <button
+        class="slider-next absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-all duration-300 hover:scale-110 z-20"
+        aria-label="Image suivante"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ color: G }}>
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </>
+  )}
+
+  <!-- Dots Navigation -->
+  {showDots && images.length > 1 && (
+    <div class="slider-dots absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+      {images.map((_, index) => (
+        <button
+          class={`slider-dot w-3 h-3 rounded-full transition-all duration-300 ${index === 0 ? 'w-8' : ''}`}
+          data-index={index}
+          aria-label={`Aller à l'image ${index + 1}`}
+          style={{ 
+            background: index === 0 ? G : 'rgba(255,255,255,0.5)',
+            opacity: index === 0 ? 1 : 0.7
+          }}
+        ></button>
+      ))}
+    </div>
+  )}
+
+  <!-- Progress Bar -->
+  {images.length > 1 && (
+    <div class="slider-progress absolute bottom-0 left-0 right-0 h-1 bg-white/30 z-20">
+      <div class="slider-progress-bar h-full transition-all duration-100 ease-linear" style={{ background: G, width: '0%' }}></div>
+    </div>
+  )}
+</div>
+
+<style>
+  .slide {
+    will-change: opacity;
+  }
+</style>
+
+<script define:vars={{ images, interval }}>
+  let currentIndex = 0;
+  let autoSlideInterval: number;
+  let progressInterval: number;
+  const totalSlides = images.length;
+
+  // Get elements
+  const container = document.querySelector('.image-slider-container') as HTMLElement;
+  const slides = container?.querySelectorAll('.slide');
+  const dots = container?.querySelectorAll('.slider-dot');
+  const prevBtn = container?.querySelector('.slider-prev') as HTMLButtonElement;
+  const nextBtn = container?.querySelector('.slider-next') as HTMLButtonElement;
+  const progressBar = container?.querySelector('.slider-progress-bar') as HTMLElement;
+
+  // Update slide visibility
+  function updateSlide(index: number) {
+    if (!slides || !dots) return;
+
+    slides.forEach((slide, i) => {
+      if (i === index) {
+        slide.classList.remove('opacity-0');
+        slide.classList.add('opacity-100');
+      } else {
+        slide.classList.remove('opacity-100');
+        slide.classList.add('opacity-0');
+      }
+    });
+
+    dots.forEach((dot, i) => {
+      if (i === index) {
+        dot.classList.add('w-8');
+        dot.classList.remove('w-3');
+        dot.style.background = '#7AC943';
+        dot.style.opacity = '1';
+      } else {
+        dot.classList.remove('w-8');
+        dot.classList.add('w-3');
+        dot.style.background = 'rgba(255,255,255,0.5)';
+        dot.style.opacity = '0.7';
+      }
+    });
+
+    currentIndex = index;
+    resetProgress();
+  }
+
+  // Next slide
+  function nextSlide() {
+    const nextIndex = (currentIndex + 1) % totalSlides;
+    updateSlide(nextIndex);
+  }
+
+  // Previous slide
+  function prevSlide() {
+    const prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+    updateSlide(prevIndex);
+  }
+
+  // Start auto slide
+  function startAutoSlide() {
+    autoSlideInterval = window.setInterval(nextSlide, interval);
+    startProgress();
+  }
+
+  // Stop auto slide
+  function stopAutoSlide() {
+    clearInterval(autoSlideInterval);
+    stopProgress();
+  }
+
+  // Progress bar animation
+  function startProgress() {
+    if (!progressBar) return;
+    let progress = 0;
+    const increment = 100 / (interval / 100);
+    
+    progressInterval = window.setInterval(() => {
+      progress += increment;
+      if (progressBar) {
+        progressBar.style.width = `${progress}%`;
+      }
+      if (progress >= 100) {
+        progress = 0;
+      }
+    }, 100);
+  }
+
+  function stopProgress() {
+    clearInterval(progressInterval);
+    if (progressBar) {
+      progressBar.style.width = '0%';
+    }
+  }
+
+  function resetProgress() {
+    stopProgress();
+    startProgress();
+  }
+
+  // Event listeners
+  prevBtn?.addEventListener('click', () => {
+    prevSlide();
+    stopAutoSlide();
+    startAutoSlide();
+  });
+
+  nextBtn?.addEventListener('click', () => {
+    nextSlide();
+    stopAutoSlide();
+    startAutoSlide();
+  });
+
+  dots?.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      updateSlide(index);
+      stopAutoSlide();
+      startAutoSlide();
+    });
+  });
+
+  // Pause on hover
+  container?.addEventListener('mouseenter', stopAutoSlide);
+  container?.addEventListener('mouseleave', startAutoSlide);
+
+  // Touch support
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  container?.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    stopAutoSlide();
+  });
+
+  container?.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+    startAutoSlide();
+  });
+
+  function handleSwipe() {
+    const swipeThreshold = 50;
+    const diff = touchStartX - touchEndX;
+    
+    if (diff > swipeThreshold) {
+      nextSlide();
+    } else if (diff < -swipeThreshold) {
+      prevSlide();
+    }
+  }
+
+  // Start auto slide if more than one image
+  if (totalSlides > 1) {
+    startAutoSlide();
+  }
+</script>

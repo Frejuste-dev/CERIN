@@ -10,8 +10,8 @@ import FinalCtaBanner from "../components/FinalCtaBanner.astro";
 import { getFeaturedPrograms, getFeaturedTestimonials, getNews } from "../lib/content";
 import { GraduationCap, Wrench, BookOpen } from "lucide-react";
 
-const G = "#7AC943";
-const Y = "#F4D000";
+const G = "#72CD00";
+const Y = "#FEFF01";
 const BG = "#F5F6F8";
 
 const cerinHome = {
@@ -94,19 +94,20 @@ const { data: cmsNews } = await getNews({ sort: ['published_at:desc'], pageSize:
         id: t.id,
         name: t.name,
         role: t.role,
+        company: t.company || "",
+        avatar: typeof t.image === 'object' && t.image ? t.image.url : "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
         quote: t.quote,
-        image: typeof t.image === 'object' && t.image ? t.image.url : undefined,
-        featured: t.featured,
+        stars: t.stars || 5,
       }))}
     />
 
     <section class="py-20 bg-white border-t border-gray-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-          <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style={{ background: "#F0FAF0", color: G }}>
+          <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4 badge-green">
             Nos Pôles de Formation
           </span>
-          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4" style={{ fontFamily: "'Poppins', sans-serif" }}>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 font-poppins">
             Un parcours complet, du collège au supérieur
           </h2>
         </div>
@@ -114,22 +115,22 @@ const { data: cmsNews } = await getNews({ sort: ['published_at:desc'], pageSize:
           {cerinHome.poles.map((pole) => {
             const IconComponent = pole.icon === "GraduationCap" ? GraduationCap : pole.icon === "Wrench" ? Wrench : BookOpen;
             return (
-              <div class="p-8 rounded-3xl hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-white" style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.05)" }}>
-                <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ background: G + "20" }}>
-                  <IconComponent size={32} style={{ color: G }} />
+              <div class="p-8 rounded-3xl hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-white shadow-card">
+                <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-light-green">
+                  <IconComponent size={32} class="text-primary-green" />
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-4" style={{ fontFamily: "'Poppins', sans-serif" }}>{pole.title}</h3>
+                <h3 class="text-xl font-bold text-gray-900 mb-4 font-poppins">{pole.title}</h3>
                 <ul class="space-y-3">
                   {pole.items.map((item) => (
-                    <li class="flex items-center gap-3 text-sm text-gray-600" style={{ fontFamily: "'Inter', sans-serif" }}>
-                      <div class="w-2 h-2 rounded-full" style={{ background: G }} />
+                    <li class="flex items-center gap-3 text-sm text-gray-600 font-inter">
+                      <div class="w-2 h-2 rounded-full bg-primary-green" />
                       {item}
                     </li>
                   ))}
                 </ul>
                 {(pole.title === "Enseignement Supérieur" || pole.title === "Technique & Professionnel") && (
-                  <a href="/formations/enseignement-superieur" class="inline-flex items-center gap-2 mt-6 px-4 py-2 rounded-xl text-xs font-bold" style={{ background: "#F0FAF0", color: G }}>
-                    Voir les formations <span style={{ fontFamily: "'Poppins', sans-serif" }}>→</span>
+                  <a href="/formations/enseignement-superieur" class="inline-flex items-center gap-2 mt-6 px-4 py-2 rounded-xl text-xs font-bold badge-green font-poppins">
+                    Voir les formations <span>→</span>
                   </a>
                 )}
               </div>
@@ -139,25 +140,25 @@ const { data: cmsNews } = await getNews({ sort: ['published_at:desc'], pageSize:
       </div>
     </section>
 
-    <section class="py-20" style={{ background: BG }}>
+    <section class="py-20 bg-light-gray">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-          <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style={{ background: "white", color: G }}>
+          <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4 badge-green">
             Formations mises en avant
           </span>
-          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4" style={{ fontFamily: "'Poppins', sans-serif" }}>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 font-poppins">
             Découvrez nos programmes
           </h2>
         </div>
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {(cmsPrograms || []).slice(0, 4).map((program: any) => (
-            <a href={`/formations/enseignement-superieur`} class="block p-6 rounded-2xl bg-white hover:shadow-lg transition-all border border-gray-100" style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.05)" }}>
+            <a href={`/formations/enseignement-superieur`} class="block p-6 rounded-2xl bg-white hover:shadow-lg transition-all border border-card-border shadow-card">
               {program.image && typeof program.image === 'object' && program.image.url && (
-                <img src={program.image.url} alt={program.title} class="w-full h-40 object-cover rounded-xl mb-4" onerror="this.src='/images/placeholder.svg'; this.onerror=null;" />
+                <img src={program.image.url} alt={program.title} class="w-full h-40 object-cover rounded-xl mb-4" onerror="this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80'; this.onerror=null;" />
               )}
-              <h3 class="font-bold text-gray-900 mb-2" style={{ fontFamily: "'Poppins', sans-serif" }}>{program.title}</h3>
-              <p class="text-xs text-gray-500 mb-2" style={{ fontFamily: "'Inter', sans-serif" }}>{program.level} • {program.duration}</p>
-              <p class="text-xs text-gray-600 line-clamp-2" style={{ fontFamily: "'Inter', sans-serif" }}>{program.description}</p>
+              <h3 class="font-bold text-gray-900 mb-2 font-poppins">{program.title}</h3>
+              <p class="text-xs text-gray-500 mb-2 font-inter">{program.level} • {program.duration}</p>
+              <p class="text-xs text-gray-600 line-clamp-2 font-inter">{program.description}</p>
             </a>
           ))}
         </div>
@@ -167,23 +168,23 @@ const { data: cmsNews } = await getNews({ sort: ['published_at:desc'], pageSize:
     <section class="py-20 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-          <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style={{ background: "#F0FAF0", color: G }}>
+          <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4 badge-green">
             Actualités récentes
           </span>
-          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4" style={{ fontFamily: "'Poppins', sans-serif" }}>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 font-poppins">
             Dernières nouvelles du CERIN
           </h2>
         </div>
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {(cmsNews || []).map((article: any) => (
-            <article class="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow" style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.05)" }}>
+            <article class="bg-white rounded-2xl overflow-hidden border border-card-border hover:shadow-lg transition-shadow shadow-card">
               {article.image && typeof article.image === 'object' && article.image.url && (
-                <img src={article.image.url} alt={article.title} class="w-full h-48 object-cover" onerror="this.src='/images/placeholder.svg'; this.onerror=null;" />
+                <img src={article.image.url} alt={article.title} class="w-full h-48 object-cover" onerror="this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80'; this.onerror=null;" />
               )}
               <div class="p-6">
-                <span class="inline-block px-2 py-1 rounded-full text-xs font-semibold mb-2" style={{ background: "#F0FAF0", color: G }}>{article.category}</span>
-                <h3 class="font-bold text-gray-900 mb-2" style={{ fontFamily: "'Poppins', sans-serif" }}>{article.title}</h3>
-                <p class="text-xs text-gray-500 mb-3" style={{ fontFamily: "'Inter', sans-serif" }}>{article.excerpt}</p>
+                <span class="inline-block px-2 py-1 rounded-full text-xs font-semibold mb-2 badge-green">{article.category}</span>
+                <h3 class="font-bold text-gray-900 mb-2 font-poppins">{article.title}</h3>
+                <p class="text-xs text-gray-500 mb-3 font-inter">{article.excerpt}</p>
                 <time class="text-xs text-gray-400" datetime={article.published_at}>
                   {new Date(article.published_at).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
                 </time>
@@ -192,7 +193,7 @@ const { data: cmsNews } = await getNews({ sort: ['published_at:desc'], pageSize:
           ))}
         </div>
         <div class="text-center mt-10">
-          <a href="/actualites" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white" style={{ background: G, fontFamily: "'Poppins', sans-serif" }}>
+          <a href="/actualites" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white btn-primary font-poppins">
             Voir toutes les actualités <span>→</span>
           </a>
         </div>

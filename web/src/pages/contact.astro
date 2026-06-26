@@ -7,10 +7,10 @@ import { ContactForm } from "../components/ContactForm";
 import { ContactFAQ } from "../components/ContactFAQ";
 import { MapPin, Phone, Mail, Printer, Clock, MessageCircle, Send } from "lucide-react";
 
-const G = "#7AC943";
-const Y = "#F4D000";
+const G = "#72CD00";
+const Y = "#FEFF01";
 const BG = "#F5F6F8";
-const DARK = "#0F2010";
+const DARK = "#0B0B0B";
 
 const contactCards = [
   { icon: MapPin, title: "Adresse", lines: ["Yopougon Songon", "Institut Pasteur", "Abidjan, Côte d'Ivoire"], action: "Itinéraire", link: "https://maps.app.goo.gl/dVt5Mc9AZZV6u8pW8", color: G },
@@ -45,26 +45,26 @@ const services = [
         <div class="flex flex-wrap items-center justify-center gap-3">
           <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider mr-2">Nos activités :</span>
           {services.map((s) => (
-            <span class="px-4 py-1.5 rounded-full text-xs font-bold text-white" style={{ background: G }}>{s}</span>
+            <span class="px-4 py-1.5 rounded-full text-xs font-bold text-white btn-primary">{s}</span>
           ))}
         </div>
       </div>
     </section>
 
     <!-- Contact Cards -->
-    <section class="py-16" style={{ background: BG }}>
+    <section class="py-16 bg-light-gray">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {contactCards.map((c) => {
             const Icon = c.icon;
             return (
-              <div class="group bg-white rounded-2xl p-6 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 border border-gray-100" style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.04)" }}>
+              <div class="group bg-white rounded-2xl p-6 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 border border-gray-100 shadow-card">
                 <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110" style={{ background: c.color === Y ? "#FFF8CC" : "#F0FAF0" }}>
                   <Icon size={22} style={{ color: c.color }} />
                 </div>
-                <h3 class="font-bold text-gray-900 mb-2 text-sm" style={{ fontFamily: "'Poppins', sans-serif" }}>{c.title}</h3>
+                <h3 class="font-bold text-gray-900 mb-2 text-sm font-poppins">{c.title}</h3>
                 {c.lines.map((l) => (
-                  <p class="text-sm text-gray-600 mb-0.5" style={{ fontFamily: "'Inter', sans-serif" }}>{l}</p>
+                  <p class="text-sm text-gray-600 mb-0.5 font-inter">{l}</p>
                 ))}
                 {c.action && c.link && (
                   <a href={c.link} target={c.link.startsWith("http") ? "_blank" : undefined} rel={c.link.startsWith("http") ? "noopener noreferrer" : undefined} class="inline-flex items-center gap-1.5 mt-4 px-4 py-2 rounded-xl text-xs font-bold transition-all hover:shadow-md" style={{ background: c.color, color: c.color === Y ? "#0B0B0B" : "white" }}>
@@ -85,13 +85,13 @@ const services = [
         <div class="grid lg:grid-cols-5 gap-12 items-start">
           <!-- Left info -->
           <div class="lg:col-span-2">
-            <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-5" style={{ background: "#F0FAF0", color: G }}>
+            <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-5 badge-green">
               Contactez-nous
             </span>
-            <h2 class="text-gray-900 mb-5" style={{ fontFamily: "'Poppins', sans-serif", fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)", fontWeight: 800 }}>
+            <h2 class="text-gray-900 mb-5 font-poppins" style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)", fontWeight: 800 }}>
               Nous sommes là pour vous
             </h2>
-            <p class="text-gray-600 leading-relaxed mb-8" style={{ fontFamily: "'Inter', sans-serif" }}>
+            <p class="text-gray-600 leading-relaxed mb-8 font-inter">
               Notre équipe du secrétariat est disponible pour répondre à toutes vos questions sur nos formations, admissions ou services. Nous nous engageons à vous répondre dans les plus brefs délais.
             </p>
 
@@ -101,41 +101,41 @@ const services = [
                 href="https://wa.me/2250102555550"
                 target="_blank"
                 rel="noreferrer"
-                class="flex items-center gap-3 p-4 rounded-2xl font-bold text-sm transition-all hover:shadow-lg hover:-translate-y-0.5"
-                style={{ background: "#25D366", color: "white", fontFamily: "'Poppins', sans-serif" }}
+                class="flex items-center gap-3 p-4 rounded-2xl font-bold text-sm transition-all hover:shadow-lg hover:-translate-y-0.5 font-poppins"
+                style={{ background: "#25D366", color: "white" }}
               >
                 <MessageCircle size={20} />
                 Contactez-nous sur WhatsApp
               </a>
               <a
                 href="tel:+2250102555550"
-                class="flex items-center gap-3 p-4 rounded-2xl font-bold text-sm border-2 transition-all hover:shadow-md"
-                style={{ border: "2px solid " + G, color: G, fontFamily: "'Poppins', sans-serif" }}
+                class="flex items-center gap-3 p-4 rounded-2xl font-bold text-sm border-2 transition-all hover:shadow-md font-poppins"
+                style={{ border: "2px solid " + G, color: G }}
               >
                 <Phone size={20} />
                 Appeler le secrétariat
               </a>
               <a
                 href="mailto:secretariat@ceringroup.com"
-                class="flex items-center gap-3 p-4 rounded-2xl font-bold text-sm border-2 border-gray-200 transition-all hover:border-green-300 hover:shadow-md"
-                style={{ color: DARK, fontFamily: "'Poppins', sans-serif" }}
+                class="flex items-center gap-3 p-4 rounded-2xl font-bold text-sm border-2 border-gray-200 transition-all hover:border-green-300 hover:shadow-md font-poppins"
+                style={{ color: DARK }}
               >
-                <Mail size={20} style={{ color: G }} />
+                <Mail size={20} class="text-primary-green" />
                 secretariat@ceringroup.com
               </a>
             </div>
 
             <!-- Newsletter -->
-            <div class="p-6 rounded-2xl border border-gray-100" style={{ background: BG }}>
+            <div class="p-6 rounded-2xl border border-gray-100 bg-light-gray">
               <div class="flex items-center gap-3 mb-3">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#F0FAF0" }}>
-                  <Send size={18} style={{ color: G }} />
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-light-green">
+                  <Send size={18} class="text-primary-green" />
                 </div>
-                <h3 class="text-lg font-extrabold text-gray-900" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                <h3 class="text-lg font-extrabold text-gray-900 font-poppins">
                   Newsletter
                 </h3>
               </div>
-              <p class="text-sm text-gray-600 mb-4" style={{ fontFamily: "'Inter', sans-serif" }}>
+              <p class="text-sm text-gray-600 mb-4 font-inter">
                 Inscrivez-vous pour recevoir nos actualités, événements et informations sur les formations.
               </p>
               <form onSubmit={(e) => { e.preventDefault(); alert("Merci ! Vous êtes inscrit à notre newsletter."); }} class="flex gap-2">
@@ -143,15 +143,11 @@ const services = [
                   type="email"
                   required
                   placeholder="votre@email.com"
-                  class="flex-1 px-4 py-3 rounded-xl border text-sm outline-none transition-all"
-                  style={{ border: "1.5px solid #E5E7EB", fontFamily: "'Inter', sans-serif" }}
-                  onFocus={(e) => (e.target.style.borderColor = G)}
-                  onBlur={(e) => (e.target.style.borderColor = "#E5E7EB")}
+                  class="flex-1 px-4 py-3 rounded-xl border text-sm outline-none transition-all font-inter border-gray-200 focus:border-primary-green"
                 />
                 <button
                   type="submit"
-                  class="px-5 py-3 rounded-xl font-bold text-sm text-white transition-all hover:shadow-lg hover:-translate-y-0.5 shrink-0"
-                  style={{ background: G, fontFamily: "'Poppins', sans-serif" }}
+                  class="px-5 py-3 rounded-xl font-bold text-sm text-white transition-all hover:shadow-lg hover:-translate-y-0.5 shrink-0 btn-primary font-poppins"
                 >
                   S'inscrire
                 </button>
@@ -167,7 +163,7 @@ const services = [
     <!-- Map Section -->
     <section class="py-10 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="rounded-3xl overflow-hidden" style={{ height: "400px", boxShadow: "0 8px 40px rgba(0,0,0,0.1)" }}>
+        <div class="rounded-3xl overflow-hidden shadow-card" style={{ height: "400px" }}>
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.674974373509!2d-4.145760723896587!3d5.313307236528741!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfc1c165fce87e25%3A0x113ef4a505132835!2sGROUPE%20CERIN!5e0!3m2!1sfr!2sci!4v1718888888888"
             width="100%"

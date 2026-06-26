@@ -7,7 +7,7 @@ const testimonials = [
     name: "Sofia Benali",
     role: "BTS MCO – Promotion 2023",
     company: "Responsable commerciale chez Prosuma",
-    avatar: "https://source.unsplash.com/100x100/?person,portrait",
+    avatar: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
     quote:
       "Le Groupe CERIN m'a donné les outils concrets pour réussir dans le monde professionnel. La qualité des intervenants et le suivi personnalisé font toute la différence. J'ai trouvé un emploi dès la fin de mon BTS.",
     stars: 5,
@@ -17,7 +17,7 @@ const testimonials = [
     name: "Youssef Karimi",
     role: "Bachelor Informatique – Promotion 2022",
     company: "Développeur Full-Stack chez InnoTech",
-    avatar: "https://source.unsplash.com/100x100/?person,portrait",
+    avatar: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
     quote:
       "La formation Bachelor en informatique au CERIN est vraiment excellente. Les projets pratiques et les partenariats avec les entreprises nous ont permis d'acquérir une expérience concrète avant même l'obtention du diplôme.",
     stars: 5,
@@ -27,7 +27,7 @@ const testimonials = [
     name: "Imane Touzani",
     role: "Master Gestion de Projet – Promotion 2024",
     company: "Chef de projet chez PwC Côte d'Ivoire",
-    avatar: "https://source.unsplash.com/100x100/?person,portrait",
+    avatar: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
     quote:
       "Le master au CERIN m'a ouvert des portes incroyables. La rigueur académique combinée aux études de cas réels m'ont préparé à relever les défis du cabinet dès le premier jour.",
     stars: 5,
@@ -37,7 +37,7 @@ const testimonials = [
     name: "Mehdi Ouali",
     role: "Bac Pro Systèmes Numériques – 2023",
     company: "Technicien réseau chez Orange Côte d'Ivoire",
-    avatar: "https://source.unsplash.com/100x100/?person,portrait",
+    avatar: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
     quote:
       "L'alternance organisée par le CERIN m'a permis d'être directement opérationnel en entreprise. Les professeurs sont disponibles et passionnés par leur métier. Je recommande vivement cette école.",
     stars: 5,
@@ -85,7 +85,7 @@ export function Testimonials() {
 
             <div className="flex items-center gap-4">
               <img  src={t.avatar} alt={t.name} className="w-14 h-14 rounded-full object-cover border-2" style={{ borderColor: "#2EA82A" }}  onError={(e) => {
-      e.currentTarget.src = '/images/placeholder.svg';
+      e.currentTarget.src = 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80';
     e.currentTarget.onerror = null;
   }} />
               <div>

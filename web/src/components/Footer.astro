@@ -44,19 +44,22 @@ const socials = [
 ];
 ---
 
-<footer id="contact" class="bg-[#0F2010]">
+<footer id="contact" style="background: linear-gradient(180deg, #1C3300 0%, #0B0B0B 100%)">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
-    <div class="grid lg:grid-cols-5 gap-10 mb-14">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-14">
       {/* Brand col */}
-      <div class="lg:col-span-2">
+      <div>
         <img
           src="/logo.png"
-           alt="CERIN Groupe"
-          class="h-14 w-auto mb-4 brightness-0 invert"
-          onerror="this.src='/images/placeholder.svg'; this.onerror=null;"
+           alt="Logo Groupe CERIN"
+          class="h-12 w-auto mb-4 brightness-0 invert"
+          onerror="this.style.display='none'"
         />
-        <p class="text-green-300 text-sm leading-relaxed mb-6 font-['Inter',sans-serif]">
-          Le Groupe CERIN accompagne les élèves et étudiants depuis 1998 dans leurs projets académiques et professionnels, du collège au Master.
+        <p class="text-white/70 text-sm leading-relaxed mb-2 font-['Inter',sans-serif]">
+          Groupe CERIN
+        </p>
+        <p class="text-[#72CD00] text-sm italic mb-6 font-['Inter',sans-serif]">
+          Former les leaders de demain
         </p>
 
         <div class="space-y-3 mb-6">
@@ -65,8 +68,8 @@ const socials = [
             { icon: Phone, text: "+225 01 02 55 55 50" },
             { icon: Mail, text: "contact@groupe-cerin.com" },
           ].map(({ icon: Icon, text }) => (
-            <div class="flex items-start gap-3 text-sm text-green-300">
-              <Icon size={15} class="shrink-0 mt-0.5" style={{ color: "#F5C800" }} />
+            <div class="flex items-start gap-3 text-sm text-white/70">
+              <Icon size={15} class="shrink-0 mt-0.5 text-[#72CD00]" />
               <span class="font-['Inter',sans-serif]">{text}</span>
             </div>
           ))}
@@ -77,10 +80,10 @@ const socials = [
             <a
               href={href}
               aria-label={label}
-              class="w-9 h-9 rounded-xl flex items-center justify-center transition-all hover:scale-110"
-style={{ background: "rgba(255,255,255,0.08)" }}
+              class="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110 border border-[#72CD00]/30 hover:bg-[#72CD00] hover:border-[#72CD00]"
+              style="background: rgba(114,205,0,0.1)"
             >
-              <Icon size={16} class="text-green-300" />
+              <Icon size={16} class="text-[#72CD00] hover:text-white" />
             </a>
           ))}
         </div>
@@ -89,7 +92,7 @@ style={{ background: "rgba(255,255,255,0.08)" }}
       {/* Links */}
       {Object.values(footerLinks).map((col) => (
         <div>
-          <h4 class="font-bold mb-5 text-sm font-['Poppins',sans-serif] text-[#FEFF01]">
+          <h4 class="text-[#72CD00] uppercase text-xs tracking-widest font-semibold mb-4 font-['Poppins',sans-serif]">
             {col.title}
           </h4>
           <ul class="space-y-2.5">
@@ -97,7 +100,7 @@ style={{ background: "rgba(255,255,255,0.08)" }}
               <li>
                 <a
                   href={link.href}
-                  class="text-sm text-green-300 hover:text-white transition-colors font-['Inter',sans-serif]"
+                  class="text-sm text-white/70 hover:text-[#FEFF01] transition-colors font-['Inter',sans-serif]"
                 >
                   {link.label}
                 </a>
@@ -109,16 +112,45 @@ style={{ background: "rgba(255,255,255,0.08)" }}
     </div>
 
     {/* Bottom bar */}
-    <div class="pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-      <p class="text-green-400 text-xs font-['Inter',sans-serif]">
-        © 2026 Groupe CERIN. Tous droits réservés.
-      </p>
-      <div class="flex items-center gap-6 text-xs text-green-400">
-        {["Mentions légales", "Politique de confidentialité", "Cookies"].map((item) => (
-          <a href="#" class="hover:text-white transition-colors font-['Inter',sans-serif]">
-            {item}
-          </a>
-        ))}
+    <div class="pt-8 border-t border-white/10">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* Copyright */}
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: rgba(114,205,0,0.15)">
+            <span class="text-[#72CD00] text-xs font-bold">©</span>
+          </div>
+          <p class="text-white/60 text-sm font-['Inter',sans-serif]">
+            2026 Groupe CERIN — Tous droits réservés
+          </p>
+        </div>
+
+        {/* Legal links */}
+        <div class="flex items-center gap-2 md:gap-4">
+          {[
+            { label: "Mentions légales", href: "/mentions-legales" },
+            { label: "Politique de confidentialité", href: "/confidentialite" },
+            { label: "Cookies", href: "/cookies" }
+          ].map((item, index) => (
+            <>
+              {index > 0 && (
+                <span class="hidden md:inline w-1 h-1 rounded-full bg-[#72CD00]/40"></span>
+              )}
+              <a 
+                href={item.href}
+                class="text-sm text-white/50 hover:text-[#FEFF01] transition-all duration-200 hover:underline underline-offset-4 font-['Inter',sans-serif]"
+              >
+                {item.label}
+              </a>
+            </>
+          ))}
+        </div>
+      </div>
+
+      {/* Additional info */}
+      <div class="mt-6 pt-6 border-t border-white/5 text-center">
+        <p class="text-white/30 text-xs font-['Inter',sans-serif]">
+          Conçu avec passion pour l'excellence éducative en Côte d'Ivoire
+        </p>
       </div>
     </div>
   </div>

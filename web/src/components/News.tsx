@@ -8,7 +8,7 @@ const news = [
     date: "14 juin 2025",
     category: "Événement",
     categoryColor: "#2EA82A",
-    image: "https://source.unsplash.com/800x500/?education,university",
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
     featured: true,
   },
   {
@@ -18,7 +18,7 @@ const news = [
     date: "28 mai 2025",
     category: "Réussite",
     categoryColor: "#F5C800",
-    image: "https://source.unsplash.com/800x500/?education,university",
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
     featured: false,
   },
   {
@@ -28,7 +28,7 @@ const news = [
     date: "10 mai 2025",
     category: "Partenariat",
     categoryColor: "#1E8A1A",
-    image: "https://source.unsplash.com/800x500/?education,university",
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
     featured: false,
   },
 ];
@@ -58,7 +58,7 @@ export function News() {
           <div className="lg:col-span-3 rounded-2xl overflow-hidden group cursor-pointer transition-all duration-300 hover:-translate-y-1" style={{ background: "white", boxShadow: "0 4px 20px rgba(0,0,0,0.07)" }}>
             <div className="relative h-64 overflow-hidden">
               <img  src={featured.image} alt={featured.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"  onError={(e) => {
-    e.currentTarget.src = '/images/placeholder.svg';
+    e.currentTarget.src = 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80';
     e.currentTarget.onerror = null;
   }} />
               <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.35))" }} />
@@ -89,7 +89,7 @@ export function News() {
               <div key={article.id} className="rounded-2xl overflow-hidden group cursor-pointer flex gap-4 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md" style={{ background: "white" }}>
                 <div className="w-28 h-24 rounded-xl overflow-hidden shrink-0">
                   <img  src={article.image} alt={article.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"  onError={(e) => {
-    e.currentTarget.src = '/images/placeholder.svg';
+    e.currentTarget.src = 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80';
     e.currentTarget.onerror = null;
   }} />
                 </div>

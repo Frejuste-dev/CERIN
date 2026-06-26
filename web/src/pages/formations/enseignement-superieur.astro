@@ -14,6 +14,12 @@ const G = "#7AC943";
 const Y = "#F4D000";
 const BG = "#F5F6F8";
 
+const heroImages = [
+  'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=80'
+];
+
 const { data: programs } = await getPrograms({
   filters: { category: { $eq: "SUPERIEUR" } },
   sort: ['level:asc', 'title:asc'],
@@ -66,7 +72,8 @@ function getIcon(program: Program) {
     <PageHero
       title="Enseignement Supérieur"
       subtitle="Construisez votre avenir professionnel avec des diplômes reconnus — BTS, Licence, Master."
-      image="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80"
+      images={heroImages}
+      useSlider={true}
       breadcrumbs={[{ label: "Enseignement Supérieur" }]}
       accent={G}
     >
@@ -156,50 +163,47 @@ function getIcon(program: Program) {
   <Footer />
 </Layout>
 
-{tabs.length > 0 ? `
-<script>
-  const tabs = ${JSON.stringify(tabs)};
-  const accentColors = ${JSON.stringify(accentColors)};
+<script define:vars={{ tabs, accentColors }}>
+  if (tabs.length > 0) {
+    const buttons = document.querySelectorAll(".tab-btn");
+    const grids = tabs.map(t => document.getElementById(`grid-${t}`));
 
-  const buttons = document.querySelectorAll(".tab-btn");
-  const grids = tabs.map(t => document.getElementById(\`grid-\${t}\`));
+    buttons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const selectedTab = btn.getAttribute("data-tab");
 
-  buttons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const selectedTab = btn.getAttribute("data-tab");
+        buttons.forEach(b => {
+          const t = b.getAttribute("data-tab");
+          if (t === selectedTab) {
+            b.style.background = accentColors[t];
+            b.style.color = t === "Licence" ? "#0B0B0B" : "white";
+            b.style.boxShadow = "0 4px 12px rgba(0,0,0,0.12)";
+          } else {
+            b.style.background = "transparent";
+            b.style.color = "#6B7280";
+            b.style.boxShadow = "none";
+          }
+        });
 
-      buttons.forEach(b => {
-        const t = b.getAttribute("data-tab");
-        if (t === selectedTab) {
-          b.style.background = accentColors[t];
-          b.style.color = t === "Licence" ? "#0B0B0B" : "white";
-          b.style.boxShadow = "0 4px 12px rgba(0,0,0,0.12)";
-        } else {
-          b.style.background = "transparent";
-          b.style.color = "#6B7280";
-          b.style.boxShadow = "none";
-        }
-      });
-
-      grids.forEach(g => {
-        if (g?.id === \`grid-\${selectedTab}\`) {
-          g.classList.remove("hidden");
-        } else {
-          g?.classList.add("hidden");
-        }
+        grids.forEach(g => {
+          if (g?.id === `grid-${selectedTab}`) {
+            g.classList.remove("hidden");
+          } else {
+            g?.classList.add("hidden");
+          }
+        });
       });
     });
-  });
 
-  const cards = document.querySelectorAll(".card-item");
-  cards.forEach(card => {
-    const accent = card.getAttribute("data-accent");
-    card.addEventListener("mouseenter", () => {
-      if (accent) card.style.borderColor = accent;
+    const cards = document.querySelectorAll(".card-item");
+    cards.forEach(card => {
+      const accent = card.getAttribute("data-accent");
+      card.addEventListener("mouseenter", () => {
+        if (accent) card.style.borderColor = accent;
+      });
+      card.addEventListener("mouseleave", () => {
+        card.style.borderColor = "transparent";
+      });
     });
-    card.addEventListener("mouseleave", () => {
-      card.style.borderColor = "transparent";
-    });
-  });
+  }
 </script>
-` : ''}

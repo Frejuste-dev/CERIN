@@ -47,5 +47,6 @@ const canonicalURL = canonical || new URL(Astro.url.pathname, Astro.site || 'htt
 	</head>
 	<body class="antialiased">
 		<slot />
+		<script is:inline src="/scripts/reveal.js"></script>
 	</body>
 </html>

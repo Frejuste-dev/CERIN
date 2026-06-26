@@ -5,7 +5,7 @@ const courses = [
     id: 1,
     title: "BTS Management Commercial Opérationnel",
     category: "BTS",
-    image: "https://source.unsplash.com/800x500/?education,university",
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
     duration: "2 ans",
     students: 120,
     level: "Bac+2",
@@ -19,7 +19,7 @@ const courses = [
     id: 2,
     title: "Bachelor Informatique & Digital",
     category: "Licence",
-    image: "https://source.unsplash.com/800x500/?education,university",
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
     duration: "3 ans",
     students: 85,
     level: "Bac+3",
@@ -33,7 +33,7 @@ const courses = [
     id: 3,
     title: "Master Gestion de Projet & Innovation",
     category: "Master",
-    image: "https://source.unsplash.com/800x500/?education,university",
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
     duration: "2 ans",
     students: 48,
     level: "Bac+5",
@@ -47,7 +47,7 @@ const courses = [
     id: 4,
     title: "Bac Pro Systèmes Numériques",
     category: "Bac Pro",
-    image: "https://source.unsplash.com/800x500/?education,university",
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
     duration: "3 ans",
     students: 72,
     level: "Terminale",
@@ -61,7 +61,7 @@ const courses = [
     id: 5,
     title: "BTS Négociation & Digitalisation de la Relation Client",
     category: "BTS",
-    image: "https://source.unsplash.com/800x500/?education,university",
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
     duration: "2 ans",
     students: 96,
     level: "Bac+2",
@@ -75,7 +75,7 @@ const courses = [
     id: 6,
     title: "Terminale Générale – Parcours Scientifique",
     category: "Lycée",
-    image: "https://source.unsplash.com/800x500/?education,university",
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
     duration: "1 an",
     students: 145,
     level: "Terminale",
@@ -144,7 +144,7 @@ export function PopularCourses() {
                   alt={course.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                  onError={(e) => {
-        e.currentTarget.src = '/images/placeholder.svg';
+        e.currentTarget.src = 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80';
     e.currentTarget.onerror = null;
   }} />
                 <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.5))" }} />

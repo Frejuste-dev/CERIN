@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import PageHero from "../../components/shared/PageHero.astro";
+import ImageSlider from "../../components/shared/ImageSlider.astro";
 import FinalCtaBanner from "../../components/FinalCtaBanner.astro";
 import { getPrograms, getProgramBySlug } from "../../lib/content";
 import type { Program } from "../../lib/api/types";
@@ -102,6 +103,27 @@ const genericRequirements = [
 ];
 const displayRequirements = requirementsArray.length > 0 ? requirementsArray : genericRequirements;
 
+// ─── Hero Images by Category ─────────────────────────────────────────────────────
+const heroImagesByCategory: Record<string, string[]> = {
+  'GENERAL': [
+    'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1200&q=80'
+  ],
+  'TECHNIQUE': [
+    'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80'
+  ],
+  'SUPERIEUR': [
+    'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=80'
+  ]
+};
+
+const heroImages = heroImagesByCategory[program.category] || heroImagesByCategory['SUPERIEUR'];
+
 // ─── SEO ──────────────────────────────────────────────────────────────────────
 const seoTitle = program.seo_title || `${program.title} | Groupe CERIN`;
 const seoDescription = program.seo_description || `Découvrez la formation ${program.title} au Groupe CERIN. ${program.description?.slice(0, 120)}...`;
@@ -194,16 +216,31 @@ const seoDescription = program.seo_description || `Découvrez la formation ${pro
             </div>
           </div>
           
+          <!-- Right column -->
+          <div class="relative lg:hidden mb-8">
+            <div class="relative rounded-2xl overflow-hidden shadow-2xl h-64">
+              <ImageSlider 
+                images={heroImages} 
+                interval={5000}
+                showDots={true}
+                showArrows={false}
+              />
+              <div class="absolute top-4 right-4 px-3 py-1.5 rounded-full text-xs font-bold text-white z-30" style={{ background: G }}>
+                Inscriptions ouvertes
+              </div>
+            </div>
+          </div>
+
           <!-- Right column (hidden on mobile) -->
           <div class="hidden lg:block relative">
-            <div class="relative rounded-2xl overflow-hidden shadow-2xl">
-              <img
-                src={program.image?.url || 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80'}
-                alt={program.title}
-                class="w-full h-96 object-cover"
-                onerror="this.src='/images/placeholder.svg'; this.onerror=null;"
+            <div class="relative rounded-2xl overflow-hidden shadow-2xl h-96">
+              <ImageSlider 
+                images={heroImages} 
+                interval={5000}
+                showDots={true}
+                showArrows={true}
               />
-              <div class="absolute top-4 right-4 px-4 py-2 rounded-full text-sm font-bold text-white" style={{ background: G }}>
+              <div class="absolute top-4 right-4 px-4 py-2 rounded-full text-sm font-bold text-white z-30" style={{ background: G }}>
                 Inscriptions ouvertes
               </div>
             </div>

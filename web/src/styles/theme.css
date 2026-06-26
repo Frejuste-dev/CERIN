@@ -1,181 +1,873 @@
 @custom-variant dark (&:is(.dark *));
 
+/* ================================================================
+   GROUPE CERIN — Design System v2
+   ----------------------------------------------------------------
+   Brand colors (from logo):
+     Primary green  →  #72CD00
+     Accent yellow  →  #FEFF01
+   
+   ⚠️  WCAG RULE — NON-NEGOTIABLE:
+     #FEFF01 background ALWAYS uses #0B0B0B (black) text.
+     Never white. Never gray. Always black.
+   ================================================================ */
+
+/* ----------------------------------------------------------------
+   1. GOOGLE FONTS IMPORT
+   ---------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800;900&display=swap');
+
+
+/* ----------------------------------------------------------------
+   2. LIGHT MODE TOKENS
+   ---------------------------------------------------------------- */
 :root {
+  /* --- Typography -------------------------------------------- */
   --font-size: 16px;
-  --background: #ffffff;
-  --foreground: oklch(0.145 0 0);
-  --card: #ffffff;
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: #72CD00;
-  --primary-foreground: #ffffff;
-  --secondary: #FEFF01;
-  --secondary-foreground: #0B0B0B;
-  --muted: #F5F6F8;
-  --muted-foreground: #6B7280;
-  --accent: #FEFF01;
-  --accent-foreground: #0B0B0B;
-  --destructive: #d4183d;
-  --destructive-foreground: #ffffff;
-  --border: rgba(0, 0, 0, 0.1);
-  --input: transparent;
-  --input-background: #f3f3f5;
-  --switch-background: #cbced4;
-  --font-weight-medium: 500;
+  --font-display: 'Poppins', system-ui, sans-serif;
+  --font-body:    'Inter',   system-ui, sans-serif;
   --font-weight-normal: 400;
-  --ring: oklch(0.708 0 0);
+  --font-weight-medium: 500;
+  --font-weight-semi:   600;
+  --font-weight-bold:   700;
+
+  /* --- CERIN Brand Palette (logo exact → enriched) ----------- */
+  --cerin-green:        #72CD00;   /* logo — primary */
+  --cerin-green-dark:   #1C3300;   /* derived — hero backgrounds */
+  --cerin-green-mid:    #3D6E00;   /* derived — hover states */
+  --cerin-green-light:  #E8F5D0;   /* derived — surface tints */
+  --cerin-yellow:       #FEFF01;   /* logo — accent */
+  --cerin-yellow-dark:  #E5E500;   /* derived — yellow hover */
+  --cerin-black:        #0B0B0B;   /* mandatory on yellow bg */
+  --cerin-gray:         #F5F6F8;   /* page background */
+  --cerin-border:       #E5EDD5;   /* green-tinted border */
+
+  /* --- Semantic Tokens --------------------------------------- */
+  --background:         #ffffff;
+  --foreground:         #0B0B0B;
+  --card:               #ffffff;
+  --card-foreground:    #0B0B0B;
+  --popover:            #ffffff;
+  --popover-foreground: #0B0B0B;
+
+  /* Primary = CERIN green */
+  --primary:            #72CD00;
+  --primary-foreground: #ffffff;
+
+  /* Secondary = CERIN yellow — foreground MUST be black (WCAG) */
+  --secondary:            #FEFF01;
+  --secondary-foreground: #0B0B0B;
+
+  --muted:            #F5F6F8;
+  --muted-foreground: #6B7280;
+
+  /* Accent = CERIN yellow — foreground MUST be black (WCAG) */
+  --accent:            #FEFF01;
+  --accent-foreground: #0B0B0B;
+
+  --destructive:            #d4183d;
+  --destructive-foreground: #ffffff;
+
+  --border:            #E5EDD5;
+  --input:             transparent;
+  --input-background:  #F5F6F8;
+  --switch-background: #cbced4;
+
+  /* Ring = brand green for focus states */
+  --ring: #72CD00;
+
+  /* --- Shadows ----------------------------------------------- */
+  --shadow-sm:
+    0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md:
+    0 4px 16px rgba(0, 0, 0, 0.10);
+  --shadow-lg:
+    0 12px 40px rgba(0, 0, 0, 0.14);
+  --shadow-card:
+    0 2px 12px rgba(28, 51, 0, 0.08),
+    0 1px 3px  rgba(0,  0,  0, 0.05);
+  --shadow-card-hover:
+    0 8px 32px rgba(28, 51, 0, 0.16),
+    0 2px 8px  rgba(0,  0,  0, 0.08);
+  --shadow-cta:
+    0 4px 20px rgba(114, 205, 0, 0.35);
+  --shadow-cta-hover:
+    0 8px 32px rgba(114, 205, 0, 0.50);
+  --shadow-yellow:
+    0 4px 16px rgba(254, 255, 1, 0.45);
+  --shadow-yellow-hover:
+    0 8px 24px rgba(254, 255, 1, 0.60);
+
+  /* --- Gradients --------------------------------------------- */
+  --gradient-hero:
+    linear-gradient(135deg, #1C3300 0%, #3D6E00 50%, #72CD00 100%);
+  --gradient-cta:
+    linear-gradient(135deg, #1C3300 0%, #72CD00 100%);
+  --gradient-section:
+    linear-gradient(180deg, #F5F6F8 0%, #ffffff 100%);
+  --gradient-yellow:
+    linear-gradient(135deg, #FEFF01 0%, #E5E500 100%);
+  --gradient-card:
+    linear-gradient(135deg, #ffffff 0%, #F5F6F8 100%);
+
+  /* --- Animation -------------------------------------------- */
+  --duration-fast:   150ms;
+  --duration-base:   300ms;
+  --duration-slow:   600ms;
+  --ease-spring:     cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-smooth:     cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:        cubic-bezier(0, 0, 0.2, 1);
+
+  /* --- Radius ----------------------------------------------- */
+  --radius: 0.75rem;
+
+  /* --- Layout ----------------------------------------------- */
+  --section-y:    5rem;
+  --section-y-lg: 7rem;
+  --container:    1280px;
+  --container-px: 1.5rem;
+
+  /* --- Sidebar (unchanged from original) -------------------- */
+  --sidebar:                      oklch(0.985 0 0);
+  --sidebar-foreground:           oklch(0.145 0 0);
+  --sidebar-primary:              #030213;
+  --sidebar-primary-foreground:   oklch(0.985 0 0);
+  --sidebar-accent:               oklch(0.97 0 0);
+  --sidebar-accent-foreground:    oklch(0.205 0 0);
+  --sidebar-border:               oklch(0.922 0 0);
+  --sidebar-ring:                 oklch(0.708 0 0);
+
+  /* --- Charts (unchanged from original) --------------------- */
   --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-2: oklch(0.6   0.118 184.704);
+  --chart-3: oklch(0.398 0.07  227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.75rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: #030213;
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
 }
 
+
+/* ----------------------------------------------------------------
+   3. DARK MODE TOKENS
+   Maintains CERIN brand identity — green stays green.
+   ---------------------------------------------------------------- */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
+  /* Brand palette adapts for dark backgrounds */
+  --cerin-green:        #8DE420;   /* brighter for contrast on dark */
+  --cerin-green-dark:   #0D1F00;
+  --cerin-green-mid:    #3D6E00;
+  --cerin-green-light:  #162900;   /* very dark green surface */
+  --cerin-yellow:       #FEFF01;
+  --cerin-yellow-dark:  #E5E500;
+  --cerin-black:        #0B0B0B;
+  --cerin-gray:         #1A2900;
+  --cerin-border:       rgba(114, 205, 0, 0.18);
+
+  --background:         #0D1200;   /* near-black with green tint */
+  --foreground:         #F0F7E6;   /* warm off-white, green-tinted */
+  --card:               #141F00;
+  --card-foreground:    #F0F7E6;
+  --popover:            #141F00;
+  --popover-foreground: #F0F7E6;
+
+  /* Keep green primary — NOT white */
+  --primary:            #8DE420;
+  --primary-foreground: #0D1200;
+
+  --secondary:            #FEFF01;
+  --secondary-foreground: #0B0B0B;  /* WCAG: always black on yellow */
+
+  --muted:            #1A2900;
+  --muted-foreground: #9DB580;
+
+  --accent:            #FEFF01;
+  --accent-foreground: #0B0B0B;     /* WCAG: always black on yellow */
+
+  --destructive:            oklch(0.396 0.141 25.723);
   --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
+
+  --border:            rgba(114, 205, 0, 0.18);
+  --input:             rgba(114, 205, 0, 0.08);
+  --input-background:  #1A2900;
+  --switch-background: #2A3D00;
+  --ring:              #8DE420;
+
+  /* Shadows adapt for dark */
+  --shadow-card:
+    0 2px 12px rgba(0, 0, 0, 0.40);
+  --shadow-card-hover:
+    0 8px 32px rgba(0, 0, 0, 0.60);
+  --shadow-cta:
+    0 4px 20px rgba(141, 228, 32, 0.25);
+  --shadow-cta-hover:
+    0 8px 32px rgba(141, 228, 32, 0.40);
+  --shadow-yellow:
+    0 4px 16px rgba(254, 255, 1, 0.30);
+
+  /* Gradients adapt */
+  --gradient-hero:
+    linear-gradient(135deg, #060D00 0%, #1C3300 55%, #3D6E00 100%);
+  --gradient-cta:
+    linear-gradient(135deg, #060D00 0%, #3D6E00 100%);
+  --gradient-section:
+    linear-gradient(180deg, #0D1200 0%, #141F00 100%);
+
+  /* Sidebar adapts */
+  --sidebar:                      #141F00;
+  --sidebar-foreground:           #F0F7E6;
+  --sidebar-primary:              #8DE420;
+  --sidebar-primary-foreground:   #0D1200;
+  --sidebar-accent:               #1A2900;
+  --sidebar-accent-foreground:    #F0F7E6;
+  --sidebar-border:               rgba(114, 205, 0, 0.15);
+  --sidebar-ring:                 #8DE420;
+
   --font-weight-medium: 500;
   --font-weight-normal: 400;
+
   --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-2: oklch(0.696 0.17  162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.439 0 0);
 }
 
+
+/* ----------------------------------------------------------------
+   4. TAILWIND THEME MAPPING
+   Maps CSS variables → Tailwind utility classes.
+   bg-cerin-green, text-cerin-yellow, shadow-card, etc.
+   ---------------------------------------------------------------- */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
+  /* Semantic colors */
+  --color-background:         var(--background);
+  --color-foreground:         var(--foreground);
+  --color-card:               var(--card);
+  --color-card-foreground:    var(--card-foreground);
+  --color-popover:            var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
+  --color-primary:            var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
+  --color-secondary:            var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
+  --color-muted:            var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
+  --color-accent:            var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
+  --color-destructive:            var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-input-background: var(--input-background);
+  --color-border:            var(--border);
+  --color-input:             var(--input);
+  --color-input-background:  var(--input-background);
   --color-switch-background: var(--switch-background);
-  --color-ring: var(--ring);
+  --color-ring:              var(--ring);
+
+  /* CERIN extended palette
+     Generates: bg-cerin-green, text-cerin-green, border-cerin-green
+                bg-cerin-green-dark, bg-cerin-yellow, etc. */
+  --color-cerin-green:        var(--cerin-green);
+  --color-cerin-green-dark:   var(--cerin-green-dark);
+  --color-cerin-green-mid:    var(--cerin-green-mid);
+  --color-cerin-green-light:  var(--cerin-green-light);
+  --color-cerin-yellow:       var(--cerin-yellow);
+  --color-cerin-yellow-dark:  var(--cerin-yellow-dark);
+  --color-cerin-black:        var(--cerin-black);
+  --color-cerin-gray:         var(--cerin-gray);
+  --color-cerin-border:       var(--cerin-border);
+
+  /* Charts */
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Radius — generates rounded-sm, rounded-md, rounded-lg, rounded-xl, rounded-2xl */
+  --radius-sm:   calc(var(--radius) - 4px);
+  --radius-md:   calc(var(--radius) - 2px);
+  --radius-lg:   var(--radius);
+  --radius-xl:   calc(var(--radius) + 4px);
+  --radius-2xl:  calc(var(--radius) + 8px);
+  --radius-full: 9999px;
+
+  /* Sidebar */
+  --color-sidebar:                      var(--sidebar);
+  --color-sidebar-foreground:           var(--sidebar-foreground);
+  --color-sidebar-primary:              var(--sidebar-primary);
+  --color-sidebar-primary-foreground:   var(--sidebar-primary-foreground);
+  --color-sidebar-accent:               var(--sidebar-accent);
+  --color-sidebar-accent-foreground:    var(--sidebar-accent-foreground);
+  --color-sidebar-border:               var(--sidebar-border);
+  --color-sidebar-ring:                 var(--sidebar-ring);
+
+  /* Font families — generates font-display, font-body */
+  --font-display: var(--font-display);
+  --font-body:    var(--font-body);
+
+  /* Animation easings */
+  --ease-spring: var(--ease-spring);
+  --ease-smooth: var(--ease-smooth);
+  --ease-out:    var(--ease-out);
 }
 
+
+/* ----------------------------------------------------------------
+   5. KEYFRAMES
+   ---------------------------------------------------------------- */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-right {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse-green {
+  0%,  100% { box-shadow: 0 0 0  0px rgba(114, 205,  0, 0.40); }
+  50%        { box-shadow: 0 0 0 10px rgba(114, 205,  0, 0.00); }
+}
+
+@keyframes pulse-yellow {
+  0%,  100% { box-shadow: 0 0 0  0px rgba(254, 255,  1, 0.50); }
+  50%        { box-shadow: 0 0 0 10px rgba(254, 255,  1, 0.00); }
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+
+/* ----------------------------------------------------------------
+   6. BASE STYLES
+   ---------------------------------------------------------------- */
 @layer base {
-  * {
+  *,
+  *::before,
+  *::after {
     @apply border-border outline-ring/50;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: var(--font-size);
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.6;
   }
 
-  /**
-  * Default typography styles for HTML elements (h1-h4, p, label, button, input).
-  * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
-  */
-
-  html {
-    font-size: var(--font-size);
+  /* Display headings — Poppins */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
   }
 
-  h1 {
-    font-size: var(--text-2xl);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
+  h1 { font-size: clamp(2rem,   5vw, 4rem);   }
+  h2 { font-size: clamp(1.5rem, 3vw, 2.5rem); }
+  h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
+  h4 { font-size: clamp(1rem,   2vw, 1.25rem); }
 
-  h2 {
-    font-size: var(--text-xl);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
-
-  h3 {
-    font-size: var(--text-lg);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
-
-  h4 {
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
-
+  /* Form elements */
   label {
-    font-size: var(--text-base);
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
     font-weight: var(--font-weight-medium);
     line-height: 1.5;
   }
 
   button {
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-medium);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: var(--font-weight-semi);
+    line-height: 1.5;
+    cursor: pointer;
+  }
+
+  input, textarea, select {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: var(--font-weight-normal);
     line-height: 1.5;
   }
 
-  input {
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-normal);
-    line-height: 1.5;
+  /* Focus visible — accessible ring */
+  :focus-visible {
+    outline: 2px solid var(--cerin-green);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Reduced motion — respect user preference */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    [data-reveal] { opacity: 1 !important; transform: none !important; }
+  }
+}
+
+
+/* ----------------------------------------------------------------
+   7. COMPONENT LAYER — Reusable CERIN classes
+   ---------------------------------------------------------------- */
+@layer components {
+
+  /* --- Scroll-reveal ----------------------------------------- */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity  var(--duration-slow) var(--ease-out),
+      transform var(--duration-slow) var(--ease-out);
+  }
+  [data-reveal].revealed {
+    opacity: 1;
+    transform: none;
+  }
+  [data-reveal-delay="1"] { transition-delay: 0.10s; }
+  [data-reveal-delay="2"] { transition-delay: 0.20s; }
+  [data-reveal-delay="3"] { transition-delay: 0.30s; }
+  [data-reveal-delay="4"] { transition-delay: 0.40s; }
+  [data-reveal-delay="5"] { transition-delay: 0.50s; }
+
+  /* --- Glassmorphism ----------------------------------------- */
+  .glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.50);
+  }
+  .glass-dark {
+    background: rgba(28, 51, 0, 0.78);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(114, 205, 0, 0.25);
+  }
+  .glass-green {
+    background: rgba(232, 245, 208, 0.80);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(114, 205, 0, 0.30);
+  }
+
+  /* --- Card -------------------------------------------------- */
+  .card-premium {
+    background: var(--card);
+    border: 1px solid var(--cerin-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    transition:
+      transform  var(--duration-base) var(--ease-spring),
+      box-shadow var(--duration-base) var(--ease-smooth);
+  }
+  .card-premium:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  /* --- Buttons ----------------------------------------------- */
+
+  /* Primary — green fill */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--cerin-green);
+    color: #ffffff;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: var(--font-weight-semi);
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--radius-full);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background   var(--duration-base) var(--ease-smooth),
+      transform    var(--duration-base) var(--ease-spring),
+      box-shadow   var(--duration-base) var(--ease-smooth);
+    box-shadow: var(--shadow-cta);
+  }
+  .btn-primary:hover {
+    background: var(--cerin-green-mid);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-cta-hover);
+  }
+  .btn-primary:active  { transform: translateY(0); }
+  .btn-primary:focus-visible {
+    outline: 2px solid var(--cerin-green);
+    outline-offset: 3px;
+  }
+
+  /* Secondary — green outline */
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--cerin-green);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: var(--font-weight-semi);
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--cerin-green);
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background var(--duration-base) var(--ease-smooth),
+      color      var(--duration-base) var(--ease-smooth),
+      transform  var(--duration-base) var(--ease-spring);
+  }
+  .btn-secondary:hover {
+    background: var(--cerin-green);
+    color: #ffffff;
+    transform: translateY(-2px);
+  }
+  .btn-secondary:active  { transform: translateY(0); }
+  .btn-secondary:focus-visible {
+    outline: 2px solid var(--cerin-green);
+    outline-offset: 3px;
+  }
+
+  /* Ghost — white border (for use on dark/green backgrounds) */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: #ffffff;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: var(--font-weight-semi);
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--radius-full);
+    border: 2px solid rgba(255, 255, 255, 0.65);
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background     var(--duration-base) var(--ease-smooth),
+      border-color   var(--duration-base) var(--ease-smooth),
+      transform      var(--duration-base) var(--ease-spring);
+  }
+  .btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
+  }
+  .btn-ghost:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+  }
+
+  /* Yellow — WCAG: #0B0B0B text ALWAYS, no exceptions */
+  .btn-yellow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--cerin-yellow);
+    color: #0B0B0B;                /* ← WCAG MANDATORY — never change */
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: var(--font-weight-bold);
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--radius-full);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background  var(--duration-base) var(--ease-smooth),
+      transform   var(--duration-base) var(--ease-spring),
+      box-shadow  var(--duration-base) var(--ease-smooth);
+    box-shadow: var(--shadow-yellow);
+  }
+  .btn-yellow:hover {
+    background: var(--cerin-yellow-dark);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: var(--shadow-yellow-hover);
+  }
+  .btn-yellow:active  { transform: translateY(0) scale(1); }
+  .btn-yellow:focus-visible {
+    outline: 2px solid #0B0B0B;
+    outline-offset: 3px;
+  }
+
+  /* Size modifiers */
+  .btn-sm {
+    font-size: 0.875rem;
+    padding: 0.5rem 1.25rem;
+  }
+  .btn-lg {
+    font-size: 1.125rem;
+    padding: 1rem 2.25rem;
+  }
+
+  /* Pulse animation variant for CTA emphasis */
+  .btn-pulse { animation: pulse-green 2.2s ease-in-out infinite; }
+  .btn-pulse-yellow { animation: pulse-yellow 2.2s ease-in-out infinite; }
+
+  /* --- Badges ------------------------------------------------ */
+
+  /* Green badge */
+  .badge-green {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    background: rgba(114, 205, 0, 0.12);
+    color: var(--cerin-green-mid);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-semi);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(114, 205, 0, 0.28);
+    white-space: nowrap;
+  }
+
+  /* Yellow badge — WCAG: #0B0B0B text ALWAYS */
+  .badge-yellow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: var(--cerin-yellow);
+    color: #0B0B0B;               /* ← WCAG MANDATORY — never change */
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-bold);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  /* Dark green badge (for hero areas) */
+  .badge-dark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    background: rgba(28, 51, 0, 0.65);
+    color: #ffffff;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-semi);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(114, 205, 0, 0.35);
+    white-space: nowrap;
+    backdrop-filter: blur(8px);
+  }
+
+  /* Neutral badge */
+  .badge-muted {
+    display: inline-flex;
+    align-items: center;
+    background: var(--muted);
+    color: var(--muted-foreground);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-medium);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  /* --- Section spacing --------------------------------------- */
+  .section {
+    padding-top: var(--section-y);
+    padding-bottom: var(--section-y);
+  }
+  .section-lg {
+    padding-top: var(--section-y-lg);
+    padding-bottom: var(--section-y-lg);
+  }
+  @media (max-width: 768px) {
+    .section    { --section-y: 3rem; }
+    .section-lg { --section-y-lg: 4rem; }
+  }
+
+  /* --- Container -------------------------------------------- */
+  .container-cerin {
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--container-px);
+  }
+
+  /* --- Section headings pattern ------------------------------ */
+  .section-eyebrow {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: var(--font-weight-semi);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cerin-green);
+    margin-bottom: 0.5rem;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-bold);
+    color: var(--foreground);
+    line-height: 1.2;
+  }
+
+  /* --- Gradient backgrounds ---------------------------------- */
+  .bg-gradient-hero    { background: var(--gradient-hero); }
+  .bg-gradient-cta     { background: var(--gradient-cta); }
+  .bg-gradient-section { background: var(--gradient-section); }
+  .bg-gradient-yellow  { background: var(--gradient-yellow); }
+
+  /* --- Form inputs ------------------------------------------ */
+  .input-cerin {
+    width: 100%;
+    background: var(--input-background);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 0.75rem 1rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--foreground);
+    transition:
+      border-color var(--duration-fast) var(--ease-smooth),
+      box-shadow   var(--duration-fast) var(--ease-smooth);
+    outline: none;
+  }
+  .input-cerin::placeholder { color: var(--muted-foreground); }
+  .input-cerin:focus {
+    border-color: var(--cerin-green);
+    box-shadow: 0 0 0 3px rgba(114, 205, 0, 0.18);
+  }
+
+  /* --- Image hover zoom (use on the parent container) -------- */
+  .img-zoom {
+    overflow: hidden;
+  }
+  .img-zoom img {
+    transition: transform var(--duration-slow) var(--ease-smooth);
+  }
+  .img-zoom:hover img {
+    transform: scale(1.05);
+  }
+
+  /* --- Divider wave utility ---------------------------------- */
+  .wave-divider {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+  }
+  .wave-divider svg {
+    display: block;
+    width: 100%;
+  }
+}
+
+
+/* ----------------------------------------------------------------
+   8. UTILITY LAYER — Atomic helpers
+   ---------------------------------------------------------------- */
+@layer utilities {
+
+  /* Animation utilities */
+  .animate-fade-up    { animation: fade-up    var(--duration-slow) var(--ease-out) both; }
+  .animate-fade-in    { animation: fade-in    0.5s var(--ease-out) both; }
+  .animate-scale-in   { animation: scale-in   0.5s var(--ease-out) both; }
+  .animate-slide-right{ animation: slide-right var(--duration-slow) var(--ease-out) both; }
+  .animate-spin-slow  { animation: spin-slow  3s linear infinite; }
+
+  /* Delay helpers */
+  .delay-75  { animation-delay:  75ms; }
+  .delay-100 { animation-delay: 100ms; }
+  .delay-150 { animation-delay: 150ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+
+  /* Text gradient (green) */
+  .text-gradient-green {
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Underline grow animation (for nav links) */
+  .underline-grow {
+    position: relative;
+  }
+  .underline-grow::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--cerin-green);
+    transition: width var(--duration-base) var(--ease-smooth);
+  }
+  .underline-grow:hover::after  { width: 100%; }
+  .underline-grow.active::after { width: 100%; }
+
+  /* Visually hidden (for screen readers) */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .sr-only:focus,
+  .sr-only:active {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
   }
 }

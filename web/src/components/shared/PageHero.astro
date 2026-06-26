@@ -1,4 +1,6 @@
 ---
+import ImageSlider from "./ImageSlider.astro";
+
 interface Breadcrumb {
   label: string;
   href?: string;
@@ -8,21 +10,47 @@ interface Props {
   title: string;
   subtitle: string;
   image?: string;
+  images?: string[];
   breadcrumbs?: Breadcrumb[];
   accent?: string;
+  useSlider?: boolean;
 }
 
-const { title, subtitle, image = "/images/placeholder.svg", breadcrumbs = [], accent = "#7AC943" } = Astro.props;
+const { 
+  title, 
+  subtitle, 
+  image = "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80", 
+  images = [], 
+  breadcrumbs = [], 
+  accent = "#7AC943",
+  useSlider = false
+} = Astro.props;
+
+const heroImages = useSlider && images.length > 0 ? images : [image];
 ---
 
-<section
-  class="relative bg-gray-900 py-24 md:py-32 overflow-hidden flex items-center min-h-[300px]"
-  style={`background-image: linear-gradient(rgba(15, 32, 16, 0.85), rgba(15, 32, 16, 0.95)), url(${image}); background-size: cover; background-position: center;`}
->
-  {/* Grid overlay */}
-  <div class="absolute inset-0 opacity-5 bg-[linear-gradient(rgba(255,255,255,.3)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.3)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+<section class="relative bg-gray-900 py-24 md:py-32 overflow-hidden flex items-center min-h-[300px]">
+  {/* Background Image/Slider */}
+  <div class="absolute inset-0">
+    {useSlider && heroImages.length > 1 ? (
+      <ImageSlider 
+        images={heroImages} 
+        interval={6000}
+        showDots={false}
+        showArrows={false}
+      />
+    ) : (
+      <div
+        class="w-full h-full"
+        style={`background-image: linear-gradient(rgba(15, 32, 16, 0.85), rgba(15, 32, 16, 0.95)), url(${heroImages[0]}); background-size: cover; background-position: center;`}
+      ></div>
+    )}
+  </div>
 
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white w-full">
+  {/* Grid overlay */}
+  <div class="absolute inset-0 opacity-5 bg-[linear-gradient(rgba(255,255,255,.3)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.3)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white w-full z-10">
     {/* Breadcrumbs */}
     {breadcrumbs.length > 0 && (
       <nav class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider mb-4 text-gray-300">
@@ -52,5 +80,5 @@ const { title, subtitle, image = "/images/placeholder.svg", breadcrumbs = [], ac
   </div>
   
   {/* Accent bottom line */}
-  <div class="absolute bottom-0 left-0 right-0 h-1" style={`background-color: ${accent}`}></div>
+  <div class="absolute bottom-0 left-0 right-0 h-1 z-20" style={`background-color: ${accent}`}></div>
 </section>

@@ -32,7 +32,7 @@ export function NewsSection({ articles = [] }: NewsSectionProps) {
     excerpt: a.excerpt || a.content.replace(/<[^>]*>/g, '').substring(0, 150) + '...',
     date: new Date(a.published_at).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }),
     cat: a.category,
-    img: typeof a.image === 'object' && a.image ? a.image.url : '/images/placeholder.svg',
+    img: typeof a.image === 'object' && a.image ? a.image.url : 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80',
     featured: a.featured,
   }));
 
@@ -97,7 +97,7 @@ export function NewsSection({ articles = [] }: NewsSectionProps) {
                   alt={featured.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   onError={(e) => {
-                    e.currentTarget.src = '/images/placeholder.svg';
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80';
                     e.currentTarget.onerror = null;
                   }}
                 />
@@ -128,7 +128,7 @@ export function NewsSection({ articles = [] }: NewsSectionProps) {
                   alt={a.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   onError={(e) => {
-                    e.currentTarget.src = '/images/placeholder.svg';
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80';
                     e.currentTarget.onerror = null;
                   }}
                 />

@@ -10,7 +10,7 @@ const programs = [
     description:
       "Un parcours académique solide du collège au baccalauréat, préparant les élèves aux études supérieures avec un encadrement personnalisé.",
     levels: ["6ème – 3ème", "Seconde – Terminale", "Baccalauréat"],
-    image: "https://source.unsplash.com/600x400/?school,students",
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
     gradient: "linear-gradient(135deg, #0F2010, #2EA82A)",
     tag: "Dès la 6ème",
     href: "#general",
@@ -23,7 +23,7 @@ const programs = [
     description:
       "Des formations pratiques et professionnalisantes pour intégrer rapidement le marché du travail ou poursuivre en BTS/Licence Pro.",
     levels: ["CAP / BEP", "Bac Professionnel", "Mention Complémentaire"],
-    image: "https://source.unsplash.com/600x400/?school,students",
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
     gradient: "linear-gradient(135deg, #1A3A00, #4CAF28)",
     tag: "Alternance possible",
     href: "#technique",
@@ -36,7 +36,7 @@ const programs = [
     description:
       "Des cursus de l'enseignement supérieur reconnus par l'État, en formation initiale ou en alternance, pour des carrières à haute valeur ajoutée.",
     levels: ["BTS (Bac+2)", "Bachelor (Bac+3)", "Master (Bac+5)"],
-    image: "https://source.unsplash.com/600x400/?school,students",
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
     gradient: "linear-gradient(135deg, #0F2010, #1E6A1A)",
     tag: "Diplômes reconnus",
     href: "#superieur",
@@ -84,7 +84,7 @@ export function ProgramCards() {
                     alt={prog.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                    onError={(e) => {
-    e.currentTarget.src = '/images/placeholder.svg';
+    e.currentTarget.src = 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80';
     e.currentTarget.onerror = null;
   }} />
                   <div className="absolute inset-0" style={{ background: prog.gradient, opacity: 0.75 }} />
