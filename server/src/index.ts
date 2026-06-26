@@ -8,10 +8,27 @@ import candidaturesRoutes from "./routes/candidatures.routes.js";
 import contactRoutes from "./routes/contact.routes.js";
 
 const app = express();
-const port = process.env.PORT || 3001;
+const PORT = parseInt(process.env.PORT || '8080');
+
+// CORS configuration
+const allowedOrigins = [
+  ...(process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : []),
+  'http://localhost:4321',
+  'http://localhost:3000',
+  'http://localhost:3001',
+];
 
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
 app.use(express.json());
 
 // Logging middleware global (optionnel mais utile)
@@ -59,13 +76,13 @@ ensureDatabaseExists()
   .then(() => sequelize.sync())
   .then(() => {
     console.log('[database]: Database connected and synchronized.');
-    app.listen(port, () => {
-      console.log(`[server]: Server is running at http://localhost:${port}`);
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`[server]: Server running on port ${PORT}`);
     });
   })
   .catch((error) => {
     console.error('[database]: Unable to connect to the database:', error);
-    app.listen(port, () => {
-      console.log(`[server]: Server is running at http://localhost:${port} (without database connection)`);
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`[server]: Server running on port ${PORT} (without database connection)`);
     });
   });
