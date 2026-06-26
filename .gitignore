@@ -1,0 +1,102 @@
+# Dependencies
+
+node_modules
+**/node_modules
+
+# Environment variables
+
+.env
+.env.*
+!.env.example
+
+# Package managers
+
+.pnpm-store
+.npm
+.yarn
+package-lock.json
+yarn.lock
+
+# Build outputs
+
+dist
+build
+coverage
+**/dist
+**/build
+
+# Astro
+
+.astro
+
+# Vite
+
+.vite
+
+# TypeScript
+
+*.tsbuildinfo
+
+# Cache
+
+.cache
+.turbo
+
+# Deployment
+
+.vercel
+.wrangler
+
+# IDE
+
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS files
+
+.DS_Store
+Thumbs.db
+
+# Logs
+
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Backend uploads (important)
+
+server/uploads
+uploads
+
+# Database local files (if any)
+
+*.sqlite
+*.sqlite3
+
+# Testing
+
+coverage
+.nyc_output
+
+# Temporary files
+
+tmp
+temp
+*.tmp
+
+# AI / local tooling
+
+.qwen
+.claude
+.cursor
+.cursor-cache
+
+# Local config overrides
+
+*.local
+config.local.*

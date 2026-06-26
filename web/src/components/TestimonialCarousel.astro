@@ -1,0 +1,180 @@
+---
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+
+interface Testimonial {
+  name: string;
+  role: string;
+  company: string;
+  avatar: string;
+  quote: string;
+  stars: number;
+}
+
+interface Props {
+  variant?: "default" | "premium";
+  testimonials: Testimonial[];
+}
+
+const { variant = "default", testimonials } = Astro.props;
+const isPremium = variant === "premium";
+---
+
+<section 
+  class={`py-16 md:py-24 testimonial-section ${isPremium ? "bg-white" : ""}`}
+  style={!isPremium ? "background: #F8FBF8" : ""}
+  aria-labelledby="testimonials-title"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 md:mb-16">
+      <div 
+        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-4"
+        style={`background: ${isPremium ? "#F5F6F8" : "#F0FAF0"}; color: #2EA82A; border: 1px solid #D1E8D1;`}
+      >
+        Témoignages
+      </div>
+      <h2 
+        id="testimonials-title"
+        class="text-gray-900 mb-3"
+        style="font-family: 'Poppins', sans-serif; font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 800"
+      >
+        {isPremium ? "Ils ont réussi avec CERIN" : "Ce que disent nos diplômés"}
+      </h2>
+      <p 
+        class="text-gray-600 max-w-2xl mx-auto"
+        style="font-family: 'Inter', sans-serif"
+      >
+        Découvrez le parcours inspirant de nos anciens étudiants et comment leur formation a propulsé leur carrière.
+      </p>
+    </div>
+
+    <div class="max-w-4xl mx-auto carousel-container relative">
+      <div class="mb-8 md:mb-10 overflow-hidden rounded-[2rem]">
+        <div class="flex transition-transform duration-500 ease-in-out testimonial-track" style="width: 100%;">
+          {testimonials.map((t, index) => (
+            <div class="w-full flex-shrink-0" style="padding: 2px;">
+              <div class="p-8 md:p-12 rounded-[2rem] bg-white border border-gray-100 shadow-xl relative" style="box-shadow: 0 10px 40px rgba(0,0,0,0.08);">
+                <div class="absolute top-8 right-8 text-[#F5C800] opacity-20" style="font-family: serif; font-size: 8rem; line-height: 1; height: 4rem;">
+                  "
+                </div>
+                
+                <div class="flex gap-1 mb-6">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star size={20} class={i < t.stars ? "fill-[#F5C800] text-[#F5C800]" : "text-gray-300"} />
+                  ))}
+                </div>
+
+                <blockquote class="text-xl md:text-2xl text-gray-800 mb-8 font-medium leading-relaxed" style="font-family: 'Inter', sans-serif;">
+                  "{t.quote}"
+                </blockquote>
+
+                <div class="flex items-center gap-4">
+                  <img src={t.avatar} alt={t.name} class="w-14 h-14 rounded-full object-cover border-2 border-[#2EA82A]" />
+                  <div>
+                    <div class="font-bold text-gray-900 text-lg" style="font-family: 'Poppins', sans-serif;">{t.name}</div>
+                    <div class="text-sm text-[#2EA82A] font-semibold">{t.role}</div>
+                    <div class="text-xs text-gray-500">{t.company}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between gap-4 flex-wrap">
+        <div class="flex gap-2 carousel-dots">
+          {testimonials.map((_, i) => (
+            <button
+              class="rounded-full transition-all duration-200"
+              style={`width: ${i === 0 ? "32px" : "10px"}; height: 10px; background: ${i === 0 ? "#2EA82A" : "#D1E8D1"};`}
+              data-index={i}
+              aria-label={`Aller au témoignage ${i + 1}`}
+            />
+          ))}
+        </div>
+
+        <div class="flex gap-2 ml-auto">
+          <button
+            class="prev-btn w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all hover:border-[#2EA82A] hover:text-[#2EA82A]"
+            style="border-color: #D1D5DB; color: #6B7280"
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <button
+            class="next-btn w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110"
+            style="background: #2EA82A; color: white"
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function setupCarousel() {
+    document.querySelectorAll('.testimonial-section').forEach(section => {
+      const track = section.querySelector('.testimonial-track') as HTMLElement;
+      const dots = section.querySelectorAll('.carousel-dots button');
+      const prevBtn = section.querySelector('.prev-btn');
+      const nextBtn = section.querySelector('.next-btn');
+      
+      if (!track) return;
+      
+      const count = dots.length;
+      let current = 0;
+      let interval: number;
+
+      function updateCarousel() {
+        track.style.transform = `translateX(-${current * 100}%)`;
+        dots.forEach((dot, i) => {
+          const btn = dot as HTMLElement;
+          if (i === current) {
+            btn.style.width = '32px';
+            btn.style.background = '#2EA82A';
+          } else {
+            btn.style.width = '10px';
+            btn.style.background = '#D1E8D1';
+          }
+        });
+      }
+
+      function next() {
+        current = (current + 1) % count;
+        updateCarousel();
+      }
+
+      function prev() {
+        current = (current - 1 + count) % count;
+        updateCarousel();
+      }
+
+      function startAuto() {
+        clearInterval(interval);
+        interval = window.setInterval(next, 6000);
+      }
+
+      function stopAuto() {
+        clearInterval(interval);
+      }
+
+      nextBtn?.addEventListener('click', () => { next(); stopAuto(); });
+      prevBtn?.addEventListener('click', () => { prev(); stopAuto(); });
+      
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+          current = i;
+          updateCarousel();
+          stopAuto();
+        });
+      });
+
+      startAuto();
+    });
+  }
+
+  document.addEventListener('astro:page-load', setupCarousel);
+  if (document.readyState === 'complete') setupCarousel();
+  else window.addEventListener('DOMContentLoaded', setupCarousel);
+</script>

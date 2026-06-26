@@ -1,0 +1,119 @@
+---
+import { School, BookMarked, Layers, GraduationCap, Award } from "lucide-react";
+
+const levels = [
+  {
+    icon: School,
+    title: "Collège",
+    subtitle: "6ème → 3ème",
+    desc: "Enseignement fondamental avec suivi personnalisé",
+    color: "#2EA82A",
+    bg: "#F0FAF0",
+    href: "#college",
+  },
+  {
+    icon: BookMarked,
+    title: "Lycée",
+    subtitle: "Seconde → Terminale",
+    desc: "Préparation au baccalauréat toutes filières",
+    color: "#1E8A1A",
+    bg: "#E8F5E8",
+    href: "#lycee",
+  },
+  {
+    icon: Layers,
+    title: "BTS",
+    subtitle: "Bac +2",
+    desc: "Diplôme supérieur à vocation professionnelle",
+    color: "#2EA82A",
+    bg: "#F0FAF0",
+    href: "#bts",
+  },
+  {
+    icon: GraduationCap,
+    title: "Licence",
+    subtitle: "Bac +3",
+    desc: "Parcours universitaire en sciences et lettres",
+    color: "#1E8A1A",
+    bg: "#E8F5E8",
+    href: "#licence",
+  },
+  {
+    icon: Award,
+    title: "Master",
+    subtitle: "Bac +5",
+    desc: "Expertise pointue et recherche appliquée",
+    color: "#F5C800",
+    bg: "#FFFBE6",
+    href: "#master",
+  },
+];
+---
+
+<section class="py-20" style="background: #F8FBF8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-gray-900 mb-3" style="font-family: 'Poppins', sans-serif; font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 700">
+        Accès rapide par niveau
+      </h2>
+      <p class="text-gray-500" style="font-family: 'Inter', sans-serif">
+        Trouvez directement votre programme selon votre niveau actuel
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+      {levels.map((lvl) => {
+        const Icon = lvl.icon;
+        return (
+          <a
+            href={lvl.href}
+            class="quick-nav-card group flex flex-col items-center text-center p-6 rounded-2xl border border-transparent transition-all duration-200 hover:-translate-y-1 hover:shadow-lg cursor-pointer"
+            style="background: white; border-color: transparent"
+            data-color={lvl.color}
+            data-bg={lvl.bg}
+          >
+            <div
+              class="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 transition-transform duration-200 group-hover:scale-110"
+              style={`background: ${lvl.bg}`}
+            >
+              <Icon size={26} style={{ color: lvl.color }} />
+            </div>
+            <p class="font-bold text-gray-800 mb-1" style="font-family: 'Poppins', sans-serif">
+              {lvl.title}
+            </p>
+            <p class="text-xs font-semibold mb-2" style={`color: ${lvl.color}`}>
+              {lvl.subtitle}
+            </p>
+            <p class="text-xs text-gray-500 leading-snug" style="font-family: 'Inter', sans-serif">
+              {lvl.desc}
+            </p>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<script>
+  function setupHoverEffects() {
+    document.querySelectorAll('.quick-nav-card').forEach(card => {
+      const el = card as HTMLElement;
+      const color = el.getAttribute('data-color');
+      const bg = el.getAttribute('data-bg');
+      
+      el.addEventListener('mouseenter', () => {
+        if(color) el.style.borderColor = color;
+        if(bg) el.style.background = bg;
+      });
+      
+      el.addEventListener('mouseleave', () => {
+        el.style.borderColor = 'transparent';
+        el.style.background = 'white';
+      });
+    });
+  }
+  
+  document.addEventListener('astro:page-load', setupHoverEffects);
+  if (document.readyState === 'complete') setupHoverEffects();
+  else window.addEventListener('DOMContentLoaded', setupHoverEffects);
+</script>

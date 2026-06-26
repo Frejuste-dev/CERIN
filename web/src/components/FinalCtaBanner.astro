@@ -1,0 +1,107 @@
+---
+import { ArrowRight, Phone, CheckCircle } from "lucide-react";
+
+interface Props {
+  variant?: "default" | "premium";
+  title?: string;
+  subtitle?: string;
+}
+
+const { variant = "default", title, subtitle } = Astro.props;
+const isPremium = variant === "premium";
+---
+
+<section 
+  class={`py-16 md:py-24 relative overflow-hidden ${isPremium ? "rounded-[2rem] mx-4 md:mx-8 mb-16" : ""}`}
+  style={`background: ${isPremium ? "linear-gradient(135deg, #0B0B0B, #1A1A1A)" : "#FEFF01"}`}
+  aria-labelledby="final-cta-title"
+>
+  {/* Decorative elements */}
+  {!isPremium ? (
+    <>
+      <div
+        class="absolute -top-40 -right-40 w-80 h-80 rounded-full opacity-20 pointer-events-none"
+        style="background: #72CD00"
+        aria-hidden="true"
+      ></div>
+      <div
+        class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full opacity-20 pointer-events-none"
+        style="background: #0F2010"
+        aria-hidden="true"
+      ></div>
+    </>
+  ) : (
+    <div
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-10 pointer-events-none"
+      style="background: radial-gradient(circle, #72CD00 0%, transparent 70%)"
+      aria-hidden="true"
+    ></div>
+  )}
+
+  <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <h2
+        id="final-cta-title"
+        class={`${isPremium ? "text-white" : "text-gray-900"} mb-4`}
+        style="font-family: 'Poppins', sans-serif; font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800; line-height: 1.2"
+      >
+        {title || (isPremium ? "Démarrez votre parcours académique" : "Prêt à intégrer nos cursus ?")}
+      </h2>
+
+      <p
+        class={`${isPremium ? "text-gray-300" : "text-gray-800"} text-lg md:text-xl mb-8 max-w-2xl mx-auto`}
+        style="font-family: 'Inter', sans-serif"
+      >
+        {subtitle || (isPremium 
+          ? "La campagne d'admission est en cours. Soumettez votre candidature dès à présent."
+          : "Intégrez notre établissement et accédez à nos programmes d'excellence.")}
+      </p>
+
+      {/* Urgency message */}
+      <div
+        class="inline-block mb-8 px-4 py-2 rounded-lg font-semibold text-sm"
+        style={`background: ${isPremium ? "rgba(122, 201, 67, 0.1)" : "rgba(0,0,0,0.1)"}; color: ${isPremium ? "#72CD00" : "#0F2010"}`}
+        role="alert"
+        aria-live="polite"
+      >
+       Admissions ouvertes • Places limitées • Session 2026-2027
+      </div>
+
+      {/* CTA Buttons */}
+      <div class="flex flex-col sm:flex-row gap-4 justify-center max-w-2xl mx-auto">
+        <a
+          href="#apply"
+          class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-offset-2"
+          style="background: #72CD00; color: white; font-family: 'Poppins', sans-serif; box-shadow: 0 4px 20px rgba(122,201,67,0.3)"
+          aria-label="Inscription"
+        >
+          Inscription
+          <ArrowRight size={20} />
+        </a>
+
+        <a
+          href="#brochure"
+          class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-base border-2 transition-all duration-200 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2"
+          style={`border-color: ${isPremium ? "white" : "#0B0B0B"}; color: ${isPremium ? "white" : "#0B0B0B"}; font-family: 'Poppins', sans-serif`}
+          aria-label="Télécharger la brochure"
+        >
+          Télécharger la brochure
+        </a>
+      </div>
+
+      <div
+        class={`mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 ${isPremium ? "text-gray-400" : "text-gray-800"} text-sm font-medium`}
+        style="font-family: 'Inter', sans-serif"
+      >
+        <div className="flex items-center gap-2">
+          <CheckCircle size={14} style={{ color: isPremium ? "#72CD00" : "#0F2010" }} />
+          <span>Réponse garantie sous 48h</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <CheckCircle size={14} style={{ color: isPremium ? "#72CD00" : "#0F2010" }} />
+          <span>Diplômes reconnus par l'État</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

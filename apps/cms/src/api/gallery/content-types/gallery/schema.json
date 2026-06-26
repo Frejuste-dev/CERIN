@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "galleries",
+  "info": {
+    "singularName": "gallery",
+    "pluralName": "galleries",
+    "displayName": "Gallery",
+    "description": "Galerie photos du Groupe CERIN"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "timestamps": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"],
+      "required": true
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": ["campus", "evenements", "sports", "culture", "formation", "autre"],
+      "default": "autre"
+    },
+    "year": {
+      "type": "integer",
+      "default": 2026
+    }
+  }
+}

@@ -1,0 +1,201 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import PageHero from "../components/shared/PageHero.astro";
+import { AdmissionForm } from "../components/AdmissionForm";
+import { AdmissionsFAQ } from "../components/AdmissionsFAQ";
+import { CheckCircle, GraduationCap, Wrench, Building2, Award, Globe, Phone, Mail, MessageCircle, MapPin } from "lucide-react";
+
+const Y = "#F4D000";
+const BG = "#F5F6F8";
+const G = "#7AC943";
+const DARK = "#0F2010";
+
+const advantages = [
+  { icon: GraduationCap, title: "Formateurs experts", desc: "Des professionnels expérimentés passionnés par la transmission du savoir." },
+  { icon: Wrench, title: "Méthodes innovantes", desc: "Un apprentissage de pointe avec des outils modernes et des projets concrets." },
+  { icon: Building2, title: "Stages en entreprise", desc: "Une immersion professionnelle et un suivi personnalisé vers l'insertion." },
+  { icon: Award, title: "Diplômes reconnus", desc: "Des qualifications reconnues par l'État qui ouvrent de nouvelles opportunités." },
+  { icon: Globe, title: "Bourse en Chine", desc: "Possibilité d'obtenir une bourse d'étude après le BAC ou le BT." },
+];
+
+const admissionSteps = [
+  { step: "01", title: "Remplir le formulaire", desc: "Complétez vos informations personnelles et votre projet de formation en ligne.", icon: GraduationCap },
+  { step: "02", title: "Soumettre les documents", desc: "Téléchargez vos bulletins, diplômes et justificatifs d'identité.", icon: Wrench },
+  { step: "03", title: "Passer l'entretien", desc: "Un échange constructif avec notre équipe pédagogique pour valider votre projet.", icon: Building2 },
+  { step: "04", title: "Confirmation d'admission", desc: "Recevez votre lettre d'acceptation et préparez votre rentrée au CERIN.", icon: Award },
+];
+
+const contactInfo = {
+  address: "Yopougon Songon (Institut Pasteur), Abidjan, Côte d'Ivoire",
+  phones: ["01 025 555 50", "05 454 579 19", "07 790 202 07"],
+  fixed: "27 235 643 36",
+  email: "infos@ceringroup.com",
+  whatsapp: "https://wa.me/2250102555550",
+};
+---
+
+<Layout title="Admissions – Groupe CERIN">
+  <Header />
+
+  <main class="pt-20">
+    <PageHero
+      title="Admissions"
+      subtitle="Rejoignez le Groupe CERIN et construisez votre avenir académique. Déposez votre dossier en ligne en 4 étapes simples."
+      image="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80"
+      breadcrumbs={[{ label: "Admissions" }]}
+      accent={Y}
+    />
+
+    <!-- Contact + Form Section -->
+    <section class="py-20" style={{ background: BG }}>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-3 gap-8">
+
+          <!-- Left Column: Form (2/3) -->
+          <div class="lg:col-span-2">
+            <div class="bg-white rounded-3xl p-6 md:p-10" style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.08)" }}>
+              <AdmissionForm />
+            </div>
+          </div>
+
+          <!-- Right Column: Sticky Sidebar (1/3) -->
+          <div class="lg:col-span-1 space-y-6">
+            <div class="lg:sticky lg:top-24 space-y-6">
+              <!-- Contact Card -->
+              <div class="bg-white rounded-3xl p-6 md:p-8 border border-gray-100" style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.05)" }}>
+                <h3 class="text-xl font-extrabold text-gray-900 mb-5" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                  Contact & Assistance
+                </h3>
+                <div class="space-y-4">
+                  <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "#F0FAF0" }}>
+                      <MapPin size={18} style={{ color: G }} />
+                    </div>
+                    <p class="text-sm text-gray-600" style={{ fontFamily: "'Inter', sans-serif" }}>{contactInfo.address}</p>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "#F0FAF0" }}>
+                      <Phone size={18} style={{ color: G }} />
+                    </div>
+                    <div class="text-sm text-gray-600" style={{ fontFamily: "'Inter', sans-serif" }}>
+                      <p class="font-semibold text-gray-900">(+225) {contactInfo.phones[0]}</p>
+                      <p>(+225) {contactInfo.phones[1]}</p>
+                      <p>(+225) {contactInfo.phones[2]}</p>
+                      <p class="text-xs text-gray-400 mt-1">Fixe : (+225) {contactInfo.fixed}</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "#F0FAF0" }}>
+                      <Mail size={18} style={{ color: G }} />
+                    </div>
+                    <a href={`mailto:${contactInfo.email}`} class="text-sm font-medium transition-colors" style={{ color: G, fontFamily: "'Inter', sans-serif" }}>
+                      {contactInfo.email}
+                    </a>
+                  </div>
+                  <a
+                    href={contactInfo.whatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-white transition-all hover:shadow-lg hover:-translate-y-0.5"
+                    style={{ background: "#25D366", fontFamily: "'Poppins', sans-serif" }}
+                  >
+                    <MessageCircle size={18} />
+                    Contactez-nous sur WhatsApp
+                  </a>
+                </div>
+              </div>
+
+              <!-- Quick Requirements -->
+              <div class="bg-white rounded-3xl p-6 md:p-8 border border-gray-100" style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.05)" }}>
+                <h3 class="text-lg font-extrabold text-gray-900 mb-4" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                  Documents à préparer
+                </h3>
+                <ul class="space-y-3">
+                  {["Bulletins scolaires des 2 dernières années", "Copie de l'acte de naissance", "Copie de la CNI ou passeport", "Certificat de résidence", "Photos d'identité (4 copies)", "Diplôme précédent (si applicable)"].map((d) => (
+                    <li class="flex items-start gap-3 text-sm text-gray-700" style={{ fontFamily: "'Inter', sans-serif" }}>
+                      <CheckCircle size={16} class="shrink-0 mt-0.5" style={{ color: G }} />
+                      {d}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why CERIN Section -->
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-14">
+          <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style={{ background: "#F0FAF0", color: G }}>
+            Nos atouts
+          </span>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4" style={{ fontFamily: "'Poppins', sans-serif" }}>
+            Pourquoi choisir le Groupe CERIN ?
+          </h2>
+          <p class="text-gray-600 max-w-2xl mx-auto" style={{ fontFamily: "'Inter', sans-serif" }}>
+            Une institution d'excellence qui place la réussite de chaque étudiant au cœur de sa mission.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {advantages.map((adv) => {
+            const Icon = adv.icon;
+            return (
+              <div class="group p-6 md:p-8 rounded-2xl border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white" style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.05)" }}>
+                <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-5" style={{ background: "#F0FAF0" }}>
+                  <Icon size={28} style={{ color: G }} />
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2" style={{ fontFamily: "'Poppins', sans-serif" }}>{adv.title}</h3>
+                <p class="text-sm text-gray-600 leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>{adv.desc}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="py-20" style={{ background: BG }}>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-14">
+          <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style={{ background: "white", color: G }}>
+            Parcours
+          </span>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4" style={{ fontFamily: "'Poppins', sans-serif" }}>
+            Processus d'admission
+          </h2>
+          <p class="text-gray-600 max-w-2xl mx-auto" style={{ fontFamily: "'Inter', sans-serif" }}>
+            De votre première candidature jusqu'à la confirmation, notre équipe vous accompagne à chaque étape.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {admissionSteps.map((s) => {
+            const Icon = s.icon;
+            return (
+              <div class="relative bg-white p-6 md:p-8 rounded-2xl border border-gray-100 text-center group hover:shadow-xl transition-all duration-300" style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.05)" }}>
+                <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{ background: G + "20" }}>
+                  <span class="text-xl font-black" style={{ color: G, fontFamily: "'Poppins', sans-serif" }}>{s.step}</span>
+                </div>
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <Icon size={26} style={{ color: G }} />
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2" style={{ fontFamily: "'Poppins', sans-serif" }}>{s.title}</h3>
+                <p class="text-sm text-gray-600 leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>{s.desc}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+
+    <AdmissionsFAQ client:load />
+  </main>
+
+  <Footer />
+</Layout>

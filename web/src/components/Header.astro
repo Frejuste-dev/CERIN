@@ -1,0 +1,300 @@
+---
+import { Menu, X, ChevronDown } from "lucide-react";
+
+const navLinks = [
+  { label: "Accueil", href: "/" },
+    {
+      label: "Programmes",
+      children: [
+        { label: "Enseignement Général", href: "/formations/enseignement-general" },
+        { label: "Technique & Professionnel", href: "/formations/enseignement-technique" },
+        { label: "Supérieur", href: "/formations/enseignement-superieur" },
+      ],
+    },
+  {
+    label: "Vie CERIN",
+    children: [
+      { label: "À propos", href: "/about" },
+      { label: "Vie scolaire", href: "/evenements" },
+      { label: "Galerie", href: "/galerie" },
+      { label: "Résultats académiques", href: "/resultats" },
+    ],
+  },
+  { label: "Actualités", href: "/actualites" },
+  { label: "Offres de recrutement", href: "/offres" },
+  { label: "Contact", href: "/contact" },
+];
+
+// Active route detection (Astro.url is available in frontmatter)
+const currentPath = Astro.url.pathname;
+
+function isActive(href: string) {
+  if (href === "/") return currentPath === "/";
+  return currentPath.startsWith(href);
+}
+
+function isParentActive(children: { href: string }[]) {
+  return children.some((child) => currentPath.startsWith(child.href));
+}
+---
+
+<header
+  id="main-header"
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/95 backdrop-blur-sm py-3 border-b border-gray-100"
+>
+  {/* Skip link — accessibilité clavier */}
+  <a
+    href="#main-content"
+    class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[60] focus:px-4 focus:py-2 focus:bg-[#72CD00] focus:text-white focus:rounded-lg focus:outline-none"
+  >
+    Aller au contenu principal
+  </a>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-6">
+    {/* Logo */}
+    <a
+      href="/"
+      class="flex items-center gap-2 shrink-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#72CD00] focus:ring-offset-2"
+    >
+      <img
+        src="/logo.png"
+        alt="Groupe CERIN — Retour à l'accueil"
+        class="h-12 w-auto"
+        onerror="this.src='/images/placeholder.svg'; this.onerror=null;"
+      />
+    </a>
+
+    {/* Desktop nav */}
+    <nav class="hidden lg:flex items-center gap-1" aria-label="Navigation principale">
+      {navLinks.map((link) =>
+        link.children ? (
+          <div class="relative dropdown-wrapper">
+            <button
+              type="button"
+              class:list={[
+                "dropdown-trigger flex items-center gap-1 px-4 py-2 rounded-lg transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#72CD00] focus:ring-offset-2",
+                isParentActive(link.children)
+                  ? "text-[#72CD00] bg-green-50"
+                  : "text-gray-700 hover:text-[#72CD00] hover:bg-green-50",
+              ]}
+              aria-expanded="false"
+              aria-haspopup="true"
+            >
+              {link.label}
+              <ChevronDown size={14} class="dropdown-chevron transition-transform duration-200" />
+            </button>
+            <div class="dropdown-menu absolute top-full left-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 opacity-0 invisible scale-95 transition-all duration-200 origin-top">
+              {link.children.map((child) => (
+                <a
+                  href={child.href}
+                  class:list={[
+                    "block px-4 py-2.5 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#72CD00]",
+                    isActive(child.href)
+                      ? "text-[#72CD00] bg-green-50 font-medium"
+                      : "text-gray-700 hover:bg-green-50 hover:text-[#72CD00]",
+                  ]}
+                  aria-current={isActive(child.href) ? "page" : undefined}
+                >
+                  {child.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <a
+            href={link.href}
+            class:list={[
+              "px-4 py-2 rounded-lg transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#72CD00] focus:ring-offset-2",
+              isActive(link.href)
+                ? "text-[#72CD00] bg-green-50"
+                : "text-gray-700 hover:text-[#72CD00] hover:bg-green-50",
+            ]}
+            aria-current={isActive(link.href) ? "page" : undefined}
+          >
+            {link.label}
+          </a>
+        )
+      )}
+    </nav>
+
+    {/* CTA */}
+    <div class="hidden lg:flex items-center gap-3">
+      <a
+        href="/inscription"
+        class="text-sm font-medium text-[#72CD00] hover:text-green-700 transition-colors rounded-lg focus:outline-none focus:ring-2 focus:ring-[#72CD00] focus:ring-offset-2 px-2 py-1"
+      >
+        Espace scolarité
+      </a>
+      <a
+        href="/inscription"
+        class="inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-[#72CD00] focus:ring-offset-2"
+        style={{ background: "linear-gradient(135deg, #72CD00, #5aad1c)" }}
+      >
+        Je m'inscris
+      </a>
+    </div>
+
+    {/* Mobile toggle */}
+    <button
+      id="mobile-menu-toggle"
+      class="lg:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#72CD00] focus:ring-offset-2"
+      aria-label="Ouvrir le menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <Menu size={22} class="menu-icon" />
+      <X size={22} class="close-icon hidden" />
+    </button>
+  </div>
+
+  {/* Mobile menu */}
+  <div
+    id="mobile-menu"
+    class="hidden lg:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-1 shadow-2xl overflow-y-auto max-h-[calc(100vh-72px)]"
+  >
+    {navLinks.map((link) =>
+      link.children ? (
+        <div class="py-1">
+          <p class="px-3 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+            {link.label}
+          </p>
+          {link.children.map((child) => (
+            <a
+              href={child.href}
+              class:list={[
+                "block px-6 py-2.5 text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-[#72CD00] focus:ring-offset-2",
+                isActive(child.href)
+                  ? "text-[#72CD00] bg-green-50 font-medium"
+                  : "text-gray-700 hover:text-[#72CD00] hover:bg-green-50",
+              ]}
+              aria-current={isActive(child.href) ? "page" : undefined}
+            >
+              {child.label}
+            </a>
+          ))}
+        </div>
+      ) : (
+        <a
+          href={link.href}
+          class:list={[
+            "block px-3 py-2.5 text-sm font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-[#72CD00] focus:ring-offset-2",
+            isActive(link.href)
+              ? "text-[#72CD00] bg-green-50"
+              : "text-gray-700 hover:text-[#72CD00] hover:bg-green-50",
+          ]}
+          aria-current={isActive(link.href) ? "page" : undefined}
+        >
+          {link.label}
+        </a>
+      )
+    )}
+    <div class="pt-3 border-t border-gray-100 space-y-2">
+      <a
+        href="/inscription"
+        class="block w-full text-center px-5 py-3 rounded-xl text-sm font-semibold text-[#72CD00] bg-green-50 hover:bg-green-100 transition-colors focus:outline-none focus:ring-2 focus:ring-[#72CD00]"
+      >
+        Espace scolarité
+      </a>
+      <a
+        href="/inscription"
+        class="block w-full text-center px-5 py-3 rounded-xl text-sm font-semibold text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[#7AC943]"
+        style={{ background: "linear-gradient(135deg, #7AC943, #5aad1c)" }}
+      >
+        Je m'inscris
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Mobile menu toggle
+  const toggleBtn = document.getElementById("mobile-menu-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
+  const menuIcon = toggleBtn?.querySelector(".menu-icon");
+  const closeIcon = toggleBtn?.querySelector(".close-icon");
+
+  toggleBtn?.addEventListener("click", () => {
+    const isOpen = !mobileMenu?.classList.contains("hidden");
+    mobileMenu?.classList.toggle("hidden");
+    menuIcon?.classList.toggle("hidden");
+    closeIcon?.classList.toggle("hidden");
+    toggleBtn.setAttribute("aria-expanded", String(!isOpen));
+    toggleBtn.setAttribute("aria-label", isOpen ? "Ouvrir le menu" : "Fermer le menu");
+  });
+
+  // Header shadow on scroll
+  const header = document.getElementById("main-header");
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 20) {
+      header?.classList.remove("py-3");
+      header?.classList.add("shadow-md", "py-2");
+    } else {
+      header?.classList.remove("shadow-md", "py-2");
+      header?.classList.add("py-3");
+    }
+  });
+
+  // Click-accessible dropdowns (works on touch/tablet, not just hover)
+  const dropdownWrappers = document.querySelectorAll(".dropdown-wrapper");
+
+  dropdownWrappers.forEach((wrapper) => {
+    const trigger = wrapper.querySelector(".dropdown-trigger");
+    const menu = wrapper.querySelector(".dropdown-menu");
+    const chevron = wrapper.querySelector(".dropdown-chevron");
+
+    const openMenu = () => {
+      menu?.classList.remove("opacity-0", "invisible", "scale-95");
+      menu?.classList.add("opacity-100", "visible", "scale-100");
+      chevron?.classList.add("rotate-180");
+      trigger?.setAttribute("aria-expanded", "true");
+    };
+
+    const closeMenu = () => {
+      menu?.classList.add("opacity-0", "invisible", "scale-95");
+      menu?.classList.remove("opacity-100", "visible", "scale-100");
+      chevron?.classList.remove("rotate-180");
+      trigger?.setAttribute("aria-expanded", "false");
+    };
+
+    // Hover for mouse users (desktop)
+    wrapper.addEventListener("mouseenter", openMenu);
+    wrapper.addEventListener("mouseleave", closeMenu);
+
+    // Click for touch/keyboard users
+    trigger?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = trigger.getAttribute("aria-expanded") === "true";
+      // Close all other dropdowns first
+      dropdownWrappers.forEach((w) => {
+        if (w !== wrapper) {
+          w.querySelector(".dropdown-menu")?.classList.add("opacity-0", "invisible", "scale-95");
+          w.querySelector(".dropdown-menu")?.classList.remove("opacity-100", "visible", "scale-100");
+          w.querySelector(".dropdown-trigger")?.setAttribute("aria-expanded", "false");
+        }
+      });
+      isOpen ? closeMenu() : openMenu();
+    });
+  });
+
+  // Close dropdowns when clicking outside
+  document.addEventListener("click", (e) => {
+    dropdownWrappers.forEach((wrapper) => {
+      if (!wrapper.contains(e.target as Node)) {
+        wrapper.querySelector(".dropdown-menu")?.classList.add("opacity-0", "invisible", "scale-95");
+        wrapper.querySelector(".dropdown-menu")?.classList.remove("opacity-100", "visible", "scale-100");
+        wrapper.querySelector(".dropdown-trigger")?.setAttribute("aria-expanded", "false");
+      }
+    });
+  });
+
+  // Close dropdowns on Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      dropdownWrappers.forEach((wrapper) => {
+        wrapper.querySelector(".dropdown-menu")?.classList.add("opacity-0", "invisible", "scale-95");
+        wrapper.querySelector(".dropdown-menu")?.classList.remove("opacity-100", "visible", "scale-100");
+        wrapper.querySelector(".dropdown-trigger")?.setAttribute("aria-expanded", "false");
+      });
+    }
+  });
+</script>

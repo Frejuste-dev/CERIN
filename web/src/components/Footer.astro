@@ -1,0 +1,125 @@
+---
+import { MapPin, Phone, Mail, Facebook, Instagram, Linkedin, X } from "lucide-react";
+
+const footerLinks = {
+  formations: {
+    title: "Nos Programmes",
+    links: [
+      { label: "Enseignement Général", href: "/formations/enseignement-technique" },
+      { label: "Technique & Professionnel", href: "/formations/enseignement-technique" },
+      { label: "Enseignement Supérieur", href: "/formations/enseignement-superieur" },
+      { label: "BTS", href: "/formations/enseignement-superieur" },
+      { label: "Licence / Bachelor", href: "/formations/enseignement-superieur" },
+      { label: "Master", href: "/formations/enseignement-superieur" },
+    ],
+  },
+  admissions: {
+    title: "Admissions",
+    links: [
+      { label: "Dépôt de candidature", href: "/admissions" },
+      { label: "Inscription", href: "/inscription" },
+      { label: "Frais de scolarité", href: "/admissions" },
+      { label: "Bourses & Aides", href: "/admissions" },
+      { label: "FAQ", href: "/admissions" },
+    ],
+  },
+  institution: {
+    title: "L'Institution",
+    links: [
+      { label: "À propos du CERIN", href: "/about" },
+      { label: "Vie scolaire", href: "/evenements" },
+      { label: "Galerie", href: "/galerie" },
+      { label: "Résultats académiques", href: "/resultats" },
+      { label: "Actualités", href: "/actualites" },
+      { label: "Contact", href: "/contact" },
+    ],
+  },
+};
+
+const socials = [
+  { icon: Facebook, href: "https://www.facebook.com/profile.php?id=61572392949647", label: "Facebook" },
+  { icon: Instagram, href: "https://www.instagram.com/ceringroup_20214/", label: "Instagram" },
+  { icon: Linkedin, href: "https://www.linkedin.com/in/cerin-groupe-937542350/", label: "LinkedIn" },
+  { icon: X, href: "https://x.com/groupecerin2014", label: "X" },
+];
+---
+
+<footer id="contact" class="bg-[#0F2010]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+    <div class="grid lg:grid-cols-5 gap-10 mb-14">
+      {/* Brand col */}
+      <div class="lg:col-span-2">
+        <img
+          src="/logo.png"
+           alt="CERIN Groupe"
+          class="h-14 w-auto mb-4 brightness-0 invert"
+          onerror="this.src='/images/placeholder.svg'; this.onerror=null;"
+        />
+        <p class="text-green-300 text-sm leading-relaxed mb-6 font-['Inter',sans-serif]">
+          Le Groupe CERIN accompagne les élèves et étudiants depuis 1998 dans leurs projets académiques et professionnels, du collège au Master.
+        </p>
+
+        <div class="space-y-3 mb-6">
+          {[
+            { icon: MapPin, text: "Yopougon, face Institut Pasteur, Abidjan, Côte d'Ivoire" },
+            { icon: Phone, text: "+225 01 02 55 55 50" },
+            { icon: Mail, text: "contact@groupe-cerin.com" },
+          ].map(({ icon: Icon, text }) => (
+            <div class="flex items-start gap-3 text-sm text-green-300">
+              <Icon size={15} class="shrink-0 mt-0.5" style={{ color: "#F5C800" }} />
+              <span class="font-['Inter',sans-serif]">{text}</span>
+            </div>
+          ))}
+        </div>
+
+        <div class="flex gap-3">
+          {socials.map(({ icon: Icon, href, label }) => (
+            <a
+              href={href}
+              aria-label={label}
+              class="w-9 h-9 rounded-xl flex items-center justify-center transition-all hover:scale-110"
+style={{ background: "rgba(255,255,255,0.08)" }}
+            >
+              <Icon size={16} class="text-green-300" />
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Links */}
+      {Object.values(footerLinks).map((col) => (
+        <div>
+          <h4 class="font-bold mb-5 text-sm font-['Poppins',sans-serif] text-[#FEFF01]">
+            {col.title}
+          </h4>
+          <ul class="space-y-2.5">
+            {col.links.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="text-sm text-green-300 hover:text-white transition-colors font-['Inter',sans-serif]"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    {/* Bottom bar */}
+    <div class="pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+      <p class="text-green-400 text-xs font-['Inter',sans-serif]">
+        © 2026 Groupe CERIN. Tous droits réservés.
+      </p>
+      <div class="flex items-center gap-6 text-xs text-green-400">
+        {["Mentions légales", "Politique de confidentialité", "Cookies"].map((item) => (
+          <a href="#" class="hover:text-white transition-colors font-['Inter',sans-serif]">
+            {item}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,345 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import PageHero from "../../components/shared/PageHero.astro";
+import { TrustStatsSection } from "../../components/TrustStatsSection";
+import { TestimonialCarousel } from "../../components/TestimonialCarousel";
+import FinalCtaBanner from "../../components/FinalCtaBanner.astro";
+import { BookOpen, GraduationCap, Users, Award, Check, ArrowRight, TrendingUp } from "lucide-react";
+import { getPrograms } from "../../lib/content";
+import type { Program } from "../../lib/api/types";
+
+const G = "#7AC943";
+const Y = "#F4D000";
+const BG = "#F5F6F8";
+const BLACK = "#0B0B0B";
+const G_LIGHT = "rgba(122, 201, 67, 0.2)";
+const G_ICON_BG = "#F0FAF0";
+
+const { data: programs } = await getPrograms({
+  filters: { category: { $eq: "GENERAL" } },
+  sort: ['level:asc', 'title:asc'],
+  populate: '*',
+});
+
+const seoTitle = "Enseignement General - College et Lycee | Groupe CERIN";
+const seoDescription = "Decouvrez l enseignement general au Groupe CERIN : programmes College et Lycee alignes sur l Education Nationale de Cote d Ivoire. Preparation BEPC et BAC.";
+---
+
+<Layout
+  title={seoTitle}
+  description={seoDescription}
+  canonicalUrl="https://cerin-group.web.app/formations/enseignement-general"
+>
+  <Header />
+
+  <main class="pt-20">
+    <PageHero
+      title="Enseignement General"
+      subtitle="Du College au Lycee - Construisez les bases de votre reussite academique"
+      image="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&w=1200&q=80"
+      breadcrumbs={[{ label: "Accueil", href: "/" }, { label: "Formations", href: "/formations" }, { label: "Enseignement General" }]}
+      accent={G}
+    >
+      <div class="flex flex-wrap gap-3 mt-8">
+        {["College", "Lycee", "BEPC", "BAC"].map((tag) => (
+          <span class="px-5 py-2 rounded-full text-sm font-semibold" style={`background: ${tag === "BEPC" || tag === "BAC" ? Y : G}; color: ${tag === "BEPC" || tag === "BAC" ? BLACK : "white"}`}>{tag}</span>
+        ))}
+      </div>
+    </PageHero>
+
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 class="text-2xl font-extrabold text-gray-900 mb-6 font-['Poppins',sans-serif]">
+              Un enseignement general d excellence
+            </h2>
+            <p class="text-gray-600 leading-relaxed mb-6 font-['Inter',sans-serif]">
+              Le Groupe CERIN propose un enseignement general complet couvrant le cycle fondamental (College) et le cycle secondaire (Lycee).
+            </p>
+            <p class="text-gray-600 leading-relaxed font-['Inter',sans-serif]">
+              Notre approche pedagogique combine rigueur academique et accompagnement personnalise pour garantir la reussite de chaque eleve.
+            </p>
+          </div>
+          <div class="space-y-4">
+            <div class="flex items-start gap-4">
+              <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: G }}>
+                <Check size={16} class="text-white" />
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-900 mb-1 font-['Poppins',sans-serif]">Programmes alignes sur l Education Nationale CI</h3>
+                <p class="text-sm text-gray-500 font-['Inter',sans-serif]">Conformite totale avec le curriculum officiel</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: G }}>
+                <Check size={16} class="text-white" />
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-900 mb-1 font-['Poppins',sans-serif]">Preparation aux examens BEPC et BAC</h3>
+                <p class="text-sm text-gray-500 font-['Inter',sans-serif]">Entrainements intensifs et examens blancs</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: G }}>
+                <Check size={16} class="text-white" />
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-900 mb-1 font-['Poppins',sans-serif]">Suivi personnalise de chaque eleve</h3>
+                <p class="text-sm text-gray-500 font-['Inter',sans-serif]">Effectifs reduits pour un meilleur encadrement</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: G }}>
+                <Check size={16} class="text-white" />
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-900 mb-1 font-['Poppins',sans-serif]">Corps enseignant qualifie et experimente</h3>
+                <p class="text-sm text-gray-500 font-['Inter',sans-serif]">Professeurs dedies et pedagogues</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16" style={{ background: BG }}>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style={{ background: G_ICON_BG, color: G }}>Programmes</span>
+          <h2 class="text-gray-900 mb-3 font-extrabold text-3xl font-['Poppins',sans-serif]">
+            Nos cycles d enseignement
+          </h2>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {programs && programs.length > 0 ? programs.map((p: Program) => (
+            <a
+              href={`/formations/${p.slug}`}
+              class="bg-white rounded-2xl overflow-hidden border-2 border-transparent hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group"
+              style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}
+            >
+              <div class="aspect-video overflow-hidden">
+                <img
+                  src={p.image?.url || 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80'}
+                  alt={p.title}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  onerror="this.src='/images/placeholder.svg'; this.onerror=null;"
+                />
+              </div>
+              <div class="p-6">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-bold text-white mb-3" style={{ background: G }}>
+                  {p.level}
+                </span>
+                <h3 class="font-bold text-gray-900 mb-2 text-lg font-['Poppins',sans-serif]">{p.title}</h3>
+                <p class="text-sm text-gray-500 leading-relaxed mb-4 line-clamp-2 font-['Inter',sans-serif]">
+                  {p.description}
+                </p>
+                <div class="flex items-center justify-between pt-3 border-t border-gray-100 text-xs text-gray-400">
+                  <span>⏱ {p.duration}</span>
+                  <span>{p.tuition || 'Nous contacter'}</span>
+                </div>
+                <div class="mt-4 flex items-center gap-2 font-semibold text-sm" style={{ color: G, fontFamily: "'Poppins',sans-serif" }}>
+                  Voir la formation
+                  <ArrowRight size={16} />
+                </div>
+              </div>
+            </a>
+          )) : (
+            <div class="col-span-full text-center py-12">
+              <p class="text-gray-500 font-['Inter',sans-serif]">Aucun programme disponible pour le moment.</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style={{ background: G_ICON_BG, color: G }}>Parcours academique</span>
+          <h2 class="text-gray-900 mb-3 font-extrabold text-3xl font-['Poppins',sans-serif]">
+            Votre chemin vers la reussite
+          </h2>
+        </div>
+
+        <div class="max-w-4xl mx-auto">
+          <div class="hidden md:flex items-center justify-between relative">
+            <div class="absolute top-1/2 left-0 right-0 h-1 -translate-y-1/2" style={{ background: G_LIGHT }}></div>
+            
+            <div class="relative z-10 flex flex-col items-center text-center">
+              <div class="w-12 h-12 rounded-full flex items-center justify-center mb-3" style={{ background: G }}>
+                <BookOpen size={20} class="text-white" />
+              </div>
+              <h3 class="font-bold text-gray-900 mb-1 font-['Poppins',sans-serif]">College</h3>
+              <p class="text-xs text-gray-500 font-['Inter',sans-serif]">6eme → 3eme</p>
+              <span class="text-xs font-semibold mt-2 px-3 py-1 rounded-full" style={{ background: Y, color: BLACK }}>BEPC</span>
+            </div>
+
+            <div class="relative z-10 flex flex-col items-center text-center">
+              <div class="w-12 h-12 rounded-full flex items-center justify-center mb-3" style={{ background: G }}>
+                <GraduationCap size={20} class="text-white" />
+              </div>
+              <h3 class="font-bold text-gray-900 mb-1 font-['Poppins',sans-serif]">Lycee</h3>
+              <p class="text-xs text-gray-500 font-['Inter',sans-serif]">Seconde → Terminale</p>
+              <span class="text-xs font-semibold mt-2 px-3 py-1 rounded-full" style={{ background: Y, color: BLACK }}>BAC</span>
+            </div>
+
+            <div class="relative z-10 flex flex-col items-center text-center">
+              <div class="w-12 h-12 rounded-full flex items-center justify-center mb-3" style={{ background: G }}>
+                <Award size={20} class="text-white" />
+              </div>
+              <h3 class="font-bold text-gray-900 mb-1 font-['Poppins',sans-serif]">Superieur</h3>
+              <p class="text-xs text-gray-500 font-['Inter',sans-serif]">BTS, Licence, Master</p>
+              <a href="/formations/enseignement-superieur" class="text-xs font-semibold mt-2 px-3 py-1 rounded-full text-white transition-all hover:shadow-lg" style={{ background: G }}>
+                Decouvrir →
+              </a>
+            </div>
+          </div>
+
+          <div class="md:hidden space-y-6">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: G }}>
+                <BookOpen size={20} class="text-white" />
+              </div>
+              <div class="flex-1 pb-6 border-l-2 pl-4" style={{ borderColor: G_LIGHT }}>
+                <h3 class="font-bold text-gray-900 mb-1 font-['Poppins',sans-serif]">College</h3>
+                <p class="text-sm text-gray-500 mb-2 font-['Inter',sans-serif]">6eme → 3eme (4 ans)</p>
+                <span class="text-xs font-semibold px-3 py-1 rounded-full" style={{ background: Y, color: BLACK }}>BEPC</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: G }}>
+                <GraduationCap size={20} class="text-white" />
+              </div>
+              <div class="flex-1 pb-6 border-l-2 pl-4" style={{ borderColor: G_LIGHT }}>
+                <h3 class="font-bold text-gray-900 mb-1 font-['Poppins',sans-serif]">Lycee</h3>
+                <p class="text-sm text-gray-500 mb-2 font-['Inter',sans-serif]">Seconde → Terminale (3 ans)</p>
+                <span class="text-xs font-semibold px-3 py-1 rounded-full" style={{ background: Y, color: BLACK }}>BAC</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: G }}>
+                <Award size={20} class="text-white" />
+              </div>
+              <div class="flex-1 pl-4">
+                <h3 class="font-bold text-gray-900 mb-1 font-['Poppins',sans-serif]">Enseignement Superieur</h3>
+                <p class="text-sm text-gray-500 mb-2 font-['Inter',sans-serif]">BTS, Licence, Master</p>
+                <a href="/formations/enseignement-superieur" class="text-xs font-semibold px-3 py-1 rounded-full text-white transition-all hover:shadow-lg" style={{ background: G }}>
+                  Decouvrir →
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16" style={{ background: BG }}>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div class="text-center">
+            <div class="text-4xl font-extrabold mb-2" style={{ color: G, fontFamily: "'Poppins',sans-serif" }}>95%</div>
+            <div class="text-sm text-gray-600 font-['Inter',sans-serif]">Taux de reussite au BEPC</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-extrabold mb-2" style={{ color: G, fontFamily: "'Poppins',sans-serif" }}>88%</div>
+            <div class="text-sm text-gray-600 font-['Inter',sans-serif]">Taux de reussite au BAC</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-extrabold mb-2" style={{ color: G, fontFamily: "'Poppins',sans-serif" }}>500+</div>
+            <div class="text-sm text-gray-600 font-['Inter',sans-serif]">Eleves par an</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-extrabold mb-2" style={{ color: G, fontFamily: "'Poppins',sans-serif" }}>20+</div>
+            <div class="text-sm text-gray-600 font-['Inter',sans-serif]">Annees d experience</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style={{ background: G_ICON_BG, color: G }}>Pourquoi le Groupe CERIN</span>
+          <h2 class="text-gray-900 mb-3 font-extrabold text-3xl font-['Poppins',sans-serif]">
+            L excellence au service de votre reussite
+          </h2>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-white rounded-2xl p-8 border-2 border-transparent hover:shadow-xl transition-all" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ background: G_ICON_BG }}>
+              <Users size={32} style={{ color: G }} />
+            </div>
+            <h3 class="font-bold text-gray-900 mb-3 text-xl font-['Poppins',sans-serif]">Encadrement personnalise</h3>
+            <p class="text-gray-600 leading-relaxed font-['Inter',sans-serif]">
+              Effectifs reduits pour un suivi individualise de chaque eleve et une attention particuliere aux besoins specifiques.
+            </p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-8 border-2 border-transparent hover:shadow-xl transition-all" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ background: G_ICON_BG }}>
+              <BookOpen size={32} style={{ color: G }} />
+            </div>
+            <h3 class="font-bold text-gray-900 mb-3 text-xl font-['Poppins',sans-serif]">Preparation aux examens</h3>
+            <p class="text-gray-600 leading-relaxed font-['Inter',sans-serif]">
+              Entrainements intensifs et examens blancs pour maximiser vos resultats au BEPC et au Baccalaureat.
+            </p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-8 border-2 border-transparent hover:shadow-xl transition-all" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ background: G_ICON_BG }}>
+              <TrendingUp size={32} style={{ color: G }} />
+            </div>
+            <h3 class="font-bold text-gray-900 mb-3 text-xl font-['Poppins',sans-serif]">Orientation et conseil</h3>
+            <p class="text-gray-600 leading-relaxed font-['Inter',sans-serif]">
+              Accompagnement dans l orientation vers la filiere la plus adaptee a vos aspirations et capacites.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <TestimonialCarousel client:load />
+
+    <section class="py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="rounded-3xl p-8 md:p-12 text-center" style={{ background: `linear-gradient(135deg, ${G} 0%, #5BA832 100%)` }}>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4 font-['Poppins',sans-serif]">
+            Inscrivez votre enfant au Groupe CERIN
+          </h2>
+          <p class="text-xl text-white mb-8 opacity-90 font-['Inter',sans-serif]">
+            Inscriptions ouvertes pour la rentree 2026-2027
+          </p>
+          <a
+            href="/inscription"
+            class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold transition-all hover:shadow-lg hover:-translate-y-0.5"
+            style={{ background: Y, color: BLACK, fontFamily: "'Poppins',sans-serif" }}
+          >
+            Demander une inscription
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "Groupe CERIN - Enseignement General",
+  "description": seoDescription,
+  "url": "https://cerin-group.web.app/formations/enseignement-general",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Abidjan",
+    "addressCountry": "CI"
+  }
+})} />

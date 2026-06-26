@@ -1,0 +1,263 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import PageHero from "../../components/shared/PageHero.astro";
+import { ArrowLeft, Calendar, Tag } from "lucide-react";
+import { getNews, getNewsBySlug } from "../../lib/content";
+import type { News } from "../../lib/api/types";
+
+const G = "#7AC943";
+
+// ─── Static Paths (SSG) ───────────────────────────────────────────────────────
+export async function getStaticPaths() {
+  const { data: allNews } = await getNews({
+    populate: '*',
+    pageSize: 100,
+  });
+
+  return allNews.map((article: News) => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+// ─── Props ────────────────────────────────────────────────────────────────────
+const { slug } = Astro.params;
+let { article } = Astro.props as { article: News };
+
+// Fallback fetch in case SSG props are missing (SSR mode or preview)
+if (!article) {
+  const result = await getNewsBySlug(slug as string);
+  if (!result) {
+    return Astro.redirect('/404');
+  }
+  article = result.data;
+}
+
+// ─── Fetch related articles (same category, different slug) ───────────────────
+const { data: relatedRaw } = await getNews({
+  filters: { category: { $eq: article.category } },
+  pageSize: 4,
+  populate: '*',
+});
+const related = relatedRaw.filter((n: News) => n.slug !== article.slug).slice(0, 3);
+
+// ─── SEO ──────────────────────────────────────────────────────────────────────
+const pageTitle = article.seo_title || `${article.title} – Groupe CERIN`;
+const pageDesc = article.seo_description || article.excerpt || `Actualité du Groupe CERIN : ${article.title}`;
+const ogImageUrl = article.og_image?.url || article.image?.url;
+const publishedDate = new Date(article.published_at);
+const formattedDate = publishedDate.toLocaleDateString('fr-FR', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const categoryColors: Record<string, string> = {
+  'Admission': '#3B82F6',
+  'Réussite': '#10B981',
+  'Partenariat': '#8B5CF6',
+  'Événement': '#F59E0B',
+  'Institutionnel': G,
+};
+const catColor = categoryColors[article.category] || G;
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDesc}
+  canonical={article.canonical_url}
+  ogImage={ogImageUrl}
+  ogType="article"
+>
+  <Header />
+
+  <main class="pt-20">
+    <PageHero
+      title={article.title}
+      subtitle={article.excerpt || ''}
+      image={article.image?.url || 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80'}
+      breadcrumbs={[
+        { label: 'Actualités', href: '/actualites' },
+        { label: article.title },
+      ]}
+      accent={G}
+    />
+
+    <!-- Article meta bar -->
+    <div class="bg-white border-b border-gray-100 sticky top-20 z-10">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between flex-wrap gap-3">
+        <a
+          href="/actualites"
+          class="inline-flex items-center gap-2 text-sm font-semibold hover:underline"
+          style={{ color: G, fontFamily: "'Inter', sans-serif" }}
+        >
+          <ArrowLeft size={16} /> Toutes les actualités
+        </a>
+        <div class="flex items-center gap-4 flex-wrap">
+          <span class="flex items-center gap-1.5 text-xs text-gray-500" style="font-family:'Inter',sans-serif">
+            <Calendar size={14} style={{ color: G }} />
+            <time datetime={article.published_at}>{formattedDate}</time>
+          </span>
+          <span
+            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold"
+            style={{ background: catColor + '18', color: catColor, fontFamily: "'Inter', sans-serif" }}
+          >
+            <Tag size={11} /> {article.category}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Article body -->
+    <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <!-- Cover image -->
+      {article.image?.url && (
+        <div class="w-full aspect-video rounded-3xl overflow-hidden mb-12 shadow-lg">
+          <img
+            src={article.image.url}
+            alt={article.title}
+            class="w-full h-full object-cover"
+            onerror="this.src='/images/placeholder.svg'; this.onerror=null;"
+          />
+        </div>
+      )}
+
+      <!-- Article title (h1 for SEO) -->
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6 leading-tight" style="font-family:'Poppins',sans-serif">
+        {article.title}
+      </h1>
+
+      {article.excerpt && (
+        <p class="text-xl text-gray-600 mb-8 leading-relaxed border-l-4 pl-6" style={{ borderColor: G, fontFamily: "'Inter', sans-serif" }}>
+          {article.excerpt}
+        </p>
+      )}
+
+      <!-- Rich text content from CMS -->
+      <div
+        class="prose prose-lg max-w-none article-body"
+        set:html={article.content}
+        style="font-family:'Inter',sans-serif"
+      />
+
+      <!-- Article footer -->
+      <div class="mt-16 pt-8 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4">
+        <a
+          href="/actualites"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white transition-all hover:shadow-lg hover:-translate-y-0.5"
+          style={{ background: G, fontFamily: "'Poppins', sans-serif" }}
+        >
+          <ArrowLeft size={16} /> Retour aux actualités
+        </a>
+        <span class="text-xs text-gray-400" style="font-family:'Inter',sans-serif">
+          Publié le {formattedDate}
+        </span>
+      </div>
+    </article>
+
+    <!-- Related articles -->
+    {related.length > 0 && (
+      <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-2xl font-extrabold text-gray-900 mb-8" style="font-family:'Poppins',sans-serif">
+            Articles similaires
+          </h2>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {related.map((rel: News) => (
+              <a
+                href={`/actualites/${rel.slug}`}
+                class="block bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-xl transition-all hover:-translate-y-1"
+                style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.05)' }}
+              >
+                {rel.image?.url && (
+                  <img
+                    src={rel.image.url}
+                    alt={rel.title}
+                    class="w-full h-48 object-cover"
+                    onerror="this.src='/images/placeholder.svg'; this.onerror=null;"
+                  />
+                )}
+                <div class="p-5">
+                  <span
+                    class="inline-block px-2 py-1 rounded-full text-xs font-semibold mb-2"
+                    style={{ background: G + '18', color: G }}
+                  >
+                    {rel.category}
+                  </span>
+                  <h3 class="font-bold text-gray-900 mb-2 line-clamp-2" style="font-family:'Poppins',sans-serif">
+                    {rel.title}
+                  </h3>
+                  {rel.excerpt && (
+                    <p class="text-sm text-gray-500 line-clamp-2" style="font-family:'Inter',sans-serif">
+                      {rel.excerpt}
+                    </p>
+                  )}
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* Article body rich text styles */
+  .article-body :global(h2) {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 2rem 0 1rem;
+  }
+  .article-body :global(h3) {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1F2937;
+    margin: 1.5rem 0 0.75rem;
+  }
+  .article-body :global(p) {
+    color: #374151;
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+  }
+  .article-body :global(ul),
+  .article-body :global(ol) {
+    margin: 1rem 0 1.25rem 1.5rem;
+    color: #374151;
+  }
+  .article-body :global(li) {
+    margin-bottom: 0.5rem;
+    line-height: 1.7;
+  }
+  .article-body :global(blockquote) {
+    border-left: 4px solid #7AC943;
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    background: #F9FAFB;
+    border-radius: 0 12px 12px 0;
+    color: #374151;
+    font-style: italic;
+  }
+  .article-body :global(a) {
+    color: #7AC943;
+    text-decoration: underline;
+  }
+  .article-body :global(img) {
+    border-radius: 16px;
+    max-width: 100%;
+    height: auto;
+    margin: 1.5rem auto;
+    display: block;
+  }
+  .article-body :global(strong) {
+    color: #111827;
+    font-weight: 700;
+  }
+</style>

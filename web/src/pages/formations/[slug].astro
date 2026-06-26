@@ -1,0 +1,436 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import PageHero from "../../components/shared/PageHero.astro";
+import FinalCtaBanner from "../../components/FinalCtaBanner.astro";
+import { getPrograms, getProgramBySlug } from "../../lib/content";
+import type { Program } from "../../lib/api/types";
+import { BookOpen, Clock, GraduationCap, DollarSign, Calendar, ArrowRight, Check, Award } from "lucide-react";
+
+const G = "#7AC943";
+const Y = "#F4D000";
+const BG = "#F5F6F8";
+const BLACK = "#0B0B0B";
+
+// ─── Static Paths (SSG) ───────────────────────────────────────────────────────
+export async function getStaticPaths() {
+  const { data: allPrograms } = await getPrograms({
+    pageSize: 100,
+  });
+
+  return allPrograms.map((program: Program) => ({
+    params: { slug: program.slug },
+    props: { program },
+  }));
+}
+
+// ─── Props ────────────────────────────────────────────────────────────────────
+const { slug } = Astro.params;
+let { program } = Astro.props as { program: Program };
+
+// Fallback fetch in case SSG props are missing (SSR mode or preview)
+if (!program) {
+  const result = await getProgramBySlug(slug as string);
+  if (!result) {
+    return Astro.redirect('/404');
+  }
+  program = result.data;
+}
+
+// ─── Fetch related programs (same category, different slug) ─────────────────
+const { data: relatedRaw } = await getPrograms({
+  filters: { category: { $eq: program.category } },
+  pageSize: 100,
+});
+const related = relatedRaw.filter((p: Program) => p.slug !== program.slug).slice(0, 3);
+
+// ─── Category mapping ─────────────────────────────────────────────────────────
+const categoryMap: Record<string, { label: string; href: string }> = {
+  'GENERAL': { label: 'Enseignement Général', href: '/formations/enseignement-superieur' },
+  'TECHNIQUE': { label: 'Enseignement Technique', href: '/formations/enseignement-technique' },
+  'SUPERIEUR': { label: 'Enseignement Supérieur', href: '/formations/enseignement-superieur' },
+};
+const categoryInfo = categoryMap[program.category] || { label: program.category, href: '/formations' };
+
+// ─── Objectives parsing ───────────────────────────────────────────────────────
+const objectivesArray = typeof program.objectives === 'string' 
+  ? program.objectives.split('.').filter(s => s.trim().length > 0).map(s => s.trim())
+  : program.objectives || [];
+
+// ─── Generic objectives by category ─────────────────────────────────────────────
+const genericObjectives: Record<string, string[]> = {
+  'GENERAL': [
+    'Acquérir des bases académiques solides',
+    'Développer l\'esprit critique et l\'autonomie',
+    'Préparer l\'orientation vers le lycée ou l\'enseignement supérieur'
+  ],
+  'TECHNIQUE': [
+    'Maîtriser les compétences techniques spécialisées',
+    'Acquérir une expérience pratique en atelier',
+    'Se préparer aux métiers de l\'industrie'
+  ],
+  'SUPERIEUR': [
+    'Développer une expertise professionnelle avancée',
+    'Acquérir des compétences en gestion de projet',
+    'Préparer aux responsabilités managériales'
+  ]
+};
+const displayObjectives = objectivesArray.length > 0 ? objectivesArray : genericObjectives[program.category] || genericObjectives['SUPERIEUR'];
+
+// ─── Career opportunities parsing ─────────────────────────────────────────────
+const careersArray = typeof program.career_opportunities === 'string'
+  ? program.career_opportunities.split(',').map(s => s.trim())
+  : program.career_opportunities || [];
+
+const genericCareers: Record<string, string[]> = {
+  'GENERAL': ['Enseignant', 'Administrateur scolaire', 'Conseiller d\'orientation'],
+  'TECHNIQUE': ['Technicien spécialisé', 'Chef d\'équipe', 'Superviseur technique'],
+  'SUPERIEUR': ['Cadre supérieur', 'Consultant', 'Entrepreneur']
+};
+const displayCareers = careersArray.length > 0 ? careersArray : genericCareers[program.category] || genericCareers['SUPERIEUR'];
+
+// ─── Admission requirements parsing ───────────────────────────────────────────
+const requirementsArray = typeof program.admission_requirements === 'string'
+  ? program.admission_requirements.split('.').filter(s => s.trim().length > 0).map(s => s.trim())
+  : program.admission_requirements.map((r: string) => r) || [];
+
+const genericRequirements = [
+  `Être titulaire du diplôme approprié (${program.level || 'Baccalauréat'})`,
+  'Dossier de candidature complet',
+  'Entretien de motivation'
+];
+const displayRequirements = requirementsArray.length > 0 ? requirementsArray : genericRequirements;
+
+// ─── SEO ──────────────────────────────────────────────────────────────────────
+const seoTitle = program.seo_title || `${program.title} | Groupe CERIN`;
+const seoDescription = program.seo_description || `Découvrez la formation ${program.title} au Groupe CERIN. ${program.description?.slice(0, 120)}...`;
+---
+
+<Layout
+  title={seoTitle}
+  description={seoDescription}
+  canonicalUrl={`https://cerin-group.web.app/formations/${program.slug}`}
+>
+  <Header />
+
+  <main class="pt-20">
+    <!-- SECTION 1 — BREADCRUMB -->
+    <nav class="bg-white border-b border-gray-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <ol class="flex items-center gap-2 text-sm" style="font-family: 'Inter', sans-serif">
+          <li>
+            <a href="/" class="hover:underline" style={{ color: G }}>Accueil</a>
+          </li>
+          <li style={{ color: '#9CA3AF' }}>/</li>
+          <li>
+            <a href={categoryInfo.href} class="hover:underline" style={{ color: G }}>Formations</a>
+          </li>
+          <li style={{ color: '#9CA3AF' }}>/</li>
+          <li>
+            <a href={categoryInfo.href} class="hover:underline" style={{ color: G }}>{categoryInfo.label}</a>
+          </li>
+          <li style={{ color: '#9CA3AF' }}>/</li>
+          <li class="font-semibold text-gray-900">{program.title}</li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- SECTION 2 — HERO -->
+    <section class="bg-white py-12 md:py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 items-start">
+          <!-- Left column -->
+          <div>
+            <div class="flex flex-wrap gap-3 mb-6">
+              <span class="px-4 py-2 rounded-full text-sm font-semibold text-white" style={{ background: G }}>
+                {categoryInfo.label}
+              </span>
+              <span class="px-4 py-2 rounded-full text-sm font-semibold" style={{ background: Y, color: BLACK }}>
+                {program.level}
+              </span>
+            </div>
+            
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 leading-tight" style="font-family: 'Poppins', sans-serif">
+              {program.title}
+            </h1>
+            
+            <p class="text-lg text-gray-600 mb-6 leading-relaxed" style="font-family: 'Inter', sans-serif">
+              {program.description}
+            </p>
+            
+            <!-- Quick metadata row -->
+            <div class="grid grid-cols-3 gap-4 mb-8 p-4 rounded-xl" style={{ background: BG }}>
+              <div class="text-center">
+                <div class="text-xs text-gray-500 mb-1" style="font-family: 'Inter', sans-serif">Durée</div>
+                <div class="text-sm font-semibold text-gray-900" style="font-family: 'Poppins', sans-serif">{program.duration}</div>
+              </div>
+              <div class="text-center border-l border-r border-gray-200">
+                <div class="text-xs text-gray-500 mb-1" style="font-family: 'Inter', sans-serif">Niveau</div>
+                <div class="text-sm font-semibold text-gray-900" style="font-family: 'Poppins', sans-serif">{program.level}</div>
+              </div>
+              <div class="text-center">
+                <div class="text-xs text-gray-500 mb-1" style="font-family: 'Inter', sans-serif">Mode</div>
+                <div class="text-sm font-semibold text-gray-900" style="font-family: 'Poppins', sans-serif">Présentiel</div>
+              </div>
+            </div>
+            
+            <!-- CTAs -->
+            <div class="flex flex-wrap gap-4">
+              <a
+                href="/inscription"
+                class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-white transition-all hover:shadow-lg hover:-translate-y-0.5"
+                style={{ background: G, fontFamily: "'Poppins', sans-serif" }}
+              >
+                Candidater maintenant
+              </a>
+              <a
+                href="/contact"
+                class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold transition-all hover:shadow-lg hover:-translate-y-0.5"
+                style={{ background: BG, color: BLACK, fontFamily: "'Poppins', sans-serif" }}
+              >
+                Demander des infos
+              </a>
+            </div>
+          </div>
+          
+          <!-- Right column (hidden on mobile) -->
+          <div class="hidden lg:block relative">
+            <div class="relative rounded-2xl overflow-hidden shadow-2xl">
+              <img
+                src={program.image?.url || 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80'}
+                alt={program.title}
+                class="w-full h-96 object-cover"
+                onerror="this.src='/images/placeholder.svg'; this.onerror=null;"
+              />
+              <div class="absolute top-4 right-4 px-4 py-2 rounded-full text-sm font-bold text-white" style={{ background: G }}>
+                Inscriptions ouvertes
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3 — QUICK FACTS BAR -->
+    <section class="py-8 bg-white border-y border-gray-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: G + '18' }}>
+              <Award size={20} style={{ color: G }} />
+            </div>
+            <div>
+              <div class="text-xs text-gray-500" style="font-family: 'Inter', sans-serif">Diplôme</div>
+              <div class="text-sm font-semibold text-gray-900" style="font-family: 'Poppins', sans-serif">{program.level}</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: G + '18' }}>
+              <Clock size={20} style={{ color: G }} />
+            </div>
+            <div>
+              <div class="text-xs text-gray-500" style="font-family: 'Inter', sans-serif">Durée</div>
+              <div class="text-sm font-semibold text-gray-900" style="font-family: 'Poppins', sans-serif">{program.duration}</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: G + '18' }}>
+              <GraduationCap size={20} style={{ color: G }} />
+            </div>
+            <div>
+              <div class="text-xs text-gray-500" style="font-family: 'Inter', sans-serif">Niveau d'entrée</div>
+              <div class="text-sm font-semibold text-gray-900" style="font-family: 'Poppins', sans-serif">{program.level}</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: G + '18' }}>
+              <DollarSign size={20} style={{ color: G }} />
+            </div>
+            <div>
+              <div class="text-xs text-gray-500" style="font-family: 'Inter', sans-serif">Frais</div>
+              <div class="text-sm font-semibold text-gray-900" style="font-family: 'Poppins', sans-serif">{program.tuition || 'Nous contacter'}</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 col-span-2 md:col-span-1">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: G + '18' }}>
+              <Calendar size={20} style={{ color: G }} />
+            </div>
+            <div>
+              <div class="text-xs text-gray-500" style="font-family: 'Inter', sans-serif">Rentrée</div>
+              <div class="text-sm font-semibold text-gray-900" style="font-family: 'Poppins', sans-serif">Octobre 2026</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4 — PROGRAM OVERVIEW -->
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12">
+          <!-- Left: Description -->
+          <div>
+            <h2 class="text-2xl font-extrabold text-gray-900 mb-6" style="font-family: 'Poppins', sans-serif">
+              À propos de cette formation
+            </h2>
+            <div class="prose prose-lg max-w-none" style="font-family: 'Inter', sans-serif">
+              <p class="text-gray-600 leading-relaxed">{program.description}</p>
+            </div>
+          </div>
+          
+          <!-- Right: Objectives -->
+          <div>
+            <h2 class="text-2xl font-extrabold text-gray-900 mb-6" style="font-family: 'Poppins', sans-serif">
+              Objectifs de la formation
+            </h2>
+            <ul class="space-y-3">
+              {displayObjectives.map((objective: string) => (
+                <li class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: G }}>
+                    <Check size={14} class="text-white" />
+                  </div>
+                  <span class="text-gray-600" style="font-family: 'Inter', sans-serif">{objective}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5 — CURRICULUM -->
+    {program.curriculum && (
+      <section class="py-16" style={{ background: BG }}>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-2xl font-extrabold text-gray-900 mb-8" style="font-family: 'Poppins', sans-serif">
+            Programme de formation
+          </h2>
+          <div class="space-y-4">
+            <details class="bg-white rounded-xl overflow-hidden shadow-sm">
+              <summary class="px- py-4 cursor-pointer font-semibold text-gray-900 hover:bg-gray-50 flex items-center justify-between" style="font-family: 'Poppins', sans-serif">
+                <span>Détails du programme</span>
+                <span class="text-gray-400">▼</span>
+              </summary>
+              <div class="px-6 pb-6 pt-2">
+                <p class="text-gray-600 leading-relaxed" style="font-family: 'Inter', sans-serif">
+                  {program.curriculum}
+                </p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- SECTION 6 — CAREER OPPORTUNITIES -->
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-extrabold text-gray-900 mb-8" style="font-family: 'Poppins', sans-serif">
+          Débouchés professionnels
+        </h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {displayCareers.map((career: string) => (
+            <div class="bg-white rounded-xl p-6 border-l-4 hover:shadow-lg transition-shadow" style={{ borderColor: G, boxShadow: '0 4px 16px rgba(0,0,0,0.05)' }}>
+              <div class="flex items-center justify-between">
+                <h3 class="font-bold text-gray-900" style="font-family: 'Poppins', sans-serif">{career}</h3>
+                <ArrowRight size={18} style={{ color: G }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 7 — ADMISSION REQUIREMENTS -->
+    <section class="py-16" style={{ background: BG }}>
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-extrabold text-gray-900 mb-8" style="font-family: 'Poppins', sans-serif">
+          Conditions d'admission
+        </h2>
+        <ul class="space-y-4">
+          {displayRequirements.map((requirement: string) => (
+            <li class="flex items-start gap-3">
+              <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: G }}>
+                <Check size={14} class="text-white" />
+              </div>
+              <span class="text-gray-600" style="font-family: 'Inter', sans-serif">{requirement}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- SECTION 8 — RELATED PROGRAMS -->
+    {related.length > 0 && (
+      <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-2xl font-extrabold text-gray-900 mb-8" style="font-family: 'Poppins', sans-serif">
+            Formations similaires
+          </h2>
+          <div class="grid md:grid-cols-3 gap-6">
+            {related.map((rel: Program) => (
+              <a
+                href={`/formations/${rel.slug}`}
+                class="block bg-white rounded-2xl p-6 border-2 border-transparent hover:shadow-xl transition-all hover:-translate-y-1"
+                style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}
+              >
+                <div class="flex items-start justify-between mb-4">
+                  <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: G + '18' }}>
+                    <BookOpen size={22} style={{ color: G }} />
+                  </div>
+                  <span class="text-xs font-bold px-2.5 py-1 rounded-full text-white" style={{ background: G }}>
+                    {rel.level}
+                  </span>
+                </div>
+                <h3 class="font-bold text-gray-800 mb-2 text-lg" style="font-family: 'Poppins', sans-serif">{rel.title}</h3>
+                <p class="text-xs text-gray-500 leading-relaxed mb-4" style="font-family: 'Inter', sans-serif">{rel.description?.substring(0, 120)}...</p>
+                <div class="flex items-center justify-between pt-3 border-t border-gray-100 text-xs text-gray-400">
+                  <span>⏱ {rel.duration}</span>
+                  <span>{rel.tuition || 'Nous contacter'}</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- SECTION 9 — FINAL CTA BANNER -->
+    <section class="py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="rounded-3xl p-8 md:p-12 text-center" style={{ background: `linear-gradient(135deg, ${G} 0%, #5BA832 100%)` }}>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4" style="font-family: 'Poppins', sans-serif">
+            Prêt à rejoindre le Groupe CERIN ?
+          </h2>
+          <p class="text-xl text-white mb-8 opacity-90" style="font-family: 'Inter', sans-serif">
+            Candidatez dès maintenant pour la rentrée 2026
+          </p>
+          <a
+            href="/inscription"
+            class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold transition-all hover:shadow-lg hover:-translate-y-0.5"
+            style={{ background: Y, color: BLACK, fontFamily: "'Poppins', sans-serif" }}
+          >
+            Je candidate
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": program.title,
+  "description": program.description,
+  "provider": {
+    "@type": "Organization",
+    "name": "Groupe CERIN",
+    "url": "https://cerin-group.web.app"
+  },
+  "educationalLevel": program.level,
+})} />

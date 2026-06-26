@@ -1,0 +1,297 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import PageHero from "../components/shared/PageHero.astro";
+import { Music, Dumbbell, Globe, Users, Calendar, ChevronLeft, ChevronRight, Quote, BookOpen, Monitor, Utensils } from "lucide-react";
+import { getEvents, getTestimonials, getGallery } from "../lib/content";
+
+const G = "#7AC943";
+const Y = "#F4D000";
+const BG = "#F5F6F8";
+
+// Fetch CMS data (with automatic fallback to mock data)
+const { data: cmsEvents } = await getEvents({
+  sort: ['start_date:desc'],
+  populate: '*',
+  pageSize: 4,
+});
+
+const { data: cmsTestimonials } = await getTestimonials({
+  sort: ['created_at:desc'],
+  populate: '*',
+  pageSize: 4,
+});
+
+const { data: galleryItems } = await getGallery({
+  sort: ['created_at:desc'],
+  populate: '*',
+  pageSize: 8,
+});
+---
+
+<Layout title="Vie du campus – Groupe CERIN">
+  <Header />
+  <main class="pt-20">
+    <PageHero
+      title="Vie du campus"
+      subtitle="Découvrez la vie étudiante au CERIN : activités, événements, associations et galerie photo."
+      image="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80"
+      breadcrumbs={[{ label: "Vie du campus" }]}
+      accent={G}
+    />
+
+    <!-- Campus Infrastructure -->
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style={{ background: "#F0FAF0", color: G }}>Notre campus</span>
+            <h2 class="text-gray-900 mb-4 font-extrabold text-3xl font-['Poppins',sans-serif]">
+              Un environnement propice à l'excellence
+            </h2>
+            <p class="text-gray-500 leading-relaxed mb-6 font-['Inter',sans-serif]">
+              Le campus CERIN offre des infrastructures modernes conçues pour favoriser l'apprentissage, la créativité et l'épanouissement personnel.
+            </p>
+            <div class="grid sm:grid-cols-2 gap-4">
+              {[
+                { icon: BookOpen, title: "Bibliothèque numérique", desc: "10 000+ ressources en ligne" },
+                { icon: Monitor, title: "Lab Informatique", desc: "100 postes haute performance" },
+                { icon: Dumbbell, title: "Salle de sport", desc: "Équipement professionnel" },
+                { icon: Utensils, title: "Cantine", desc: "Restauration équilibrée" },
+              ].map((f) => {
+                const Icon = f.icon;
+                return (
+                  <div class="flex gap-3 p-4 rounded-2xl" style={{ background: BG }}>
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "#F0FAF0" }}>
+                      <Icon size={20} style={{ color: G }} />
+                    </div>
+                    <div>
+                      <p class="font-bold text-gray-800 text-sm font-['Poppins',sans-serif]">{f.title}</p>
+                      <p class="text-xs text-gray-500 font-['Inter',sans-serif]">{f.desc}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <!-- Photos slider -->
+          <div class="relative rounded-3xl overflow-hidden" style={{ boxShadow: "0 16px 48px rgba(0,0,0,0.15)" }}>
+            <img
+              id="campus-photo"
+              src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80"
+              alt="Vue du campus CERIN"
+              class="w-full h-96 object-cover transition-opacity duration-500"
+              onerror="this.src='/images/placeholder.svg'; this.onerror=null;"
+            />
+            <button id="prev-photo" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-lg hover:bg-white transition-colors">
+              <ChevronLeft size={18} className="text-gray-700" />
+            </button>
+            <button id="next-photo" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-lg hover:bg-white transition-colors">
+              <ChevronRight size={18} className="text-gray-700" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Activities & Associations -->
+    <section class="py-20" style={{ background: BG }}>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12">
+          <div>
+            <h2 class="text-gray-900 mb-8 font-extrabold text-2xl font-['Poppins',sans-serif]">
+              Vie associative et activités
+            </h2>
+            <div class="grid sm:grid-cols-2 gap-4">
+              {[
+                { icon: Dumbbell, title: "Sport & Bien-être", desc: "Football, basketball, volleyball, athlétisme — équipes compétitives et loisirs.", color: G, bg: "#F0FAF0" },
+                { icon: Music, title: "Culture & Arts", desc: "Chorale, théâtre, photographie, club cinéma pour explorer votre créativité.", color: Y, bg: "#FFF8CC" },
+                { icon: Globe, title: "Clubs académiques", desc: "Débat, langues, robotique, entrepreneuriat — développez vos compétences extra-scolaires.", color: G, bg: "#F0FAF0" },
+                { icon: Users, title: "Associations étudiantes", desc: "Solidarité, engagement associatif, projets humanitaires et leadership.", color: Y, bg: "#FFF8CC" },
+              ].map((act) => {
+                const Icon = act.icon;
+                return (
+                  <div key={act.title} class="p-5 rounded-2xl border border-gray-100 bg-white hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-3 mb-3">
+                      <div class="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: act.bg }}>
+                        <Icon size={20} style={{ color: act.color }} />
+                      </div>
+                      <h3 class="font-bold text-gray-800 text-sm" style={{ fontFamily: "'Poppins', sans-serif" }}>{act.title}</h3>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>{act.desc}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <h2 class="text-gray-900 mb-8 font-extrabold text-2xl font-['Poppins',sans-serif]">
+              Événements à venir
+            </h2>
+            <div class="space-y-4">
+              {(cmsEvents?.length || 0) > 0 ? (
+                cmsEvents!.slice(0, 4).map((ev: any) => (
+                  <div class="flex gap-4 p-4 rounded-2xl bg-white border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ background: "#F0FAF0" }}>
+                      <Calendar size={20} style={{ color: G }} />
+                    </div>
+                    <div>
+                      <h4 class="font-bold text-gray-800 text-sm mb-1" style={{ fontFamily: "'Poppins', sans-serif" }}>{ev.title}</h4>
+                      <p class="text-xs text-gray-500" style={{ fontFamily: "'Inter', sans-serif" }}>
+                        {new Date(ev.start_date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                        {ev.location && ` • ${ev.location}`}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                [
+                  { date: "20 Juin 2025", title: "Tournoi sportif inter-filières", type: "Sport" },
+                  { date: "5 Juillet 2025", title: "Conférence entrepreneuriat jeunesse", type: "Académique" },
+                  { date: "15 Juillet 2025", title: "Gala de fin d'année – Promotion 2025", type: "Gala" },
+                  { date: "1 Septembre 2025", title: "Rentrée scolaire 2025-2026", type: "Rentrée" },
+                ].map((ev, i) => (
+                  <div key={i} class="flex gap-4 p-4 rounded-2xl bg-white border border-gray-100">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ background: "#F0FAF0" }}>
+                      <Calendar size={20} style={{ color: G }} />
+                    </div>
+                    <div>
+                      <h4 class="font-bold text-gray-800 text-sm mb-1" style={{ fontFamily: "'Poppins', sans-serif" }}>{ev.title}</h4>
+                      <p class="text-xs text-gray-500" style={{ fontFamily: "'Inter', sans-serif" }}>{ev.date} • {ev.type}</p>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style={{ background: "#F0FAF0", color: G }}>Témoignages</span>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4" style={{ fontFamily: "'Poppins', sans-serif" }}>
+            Ce que disent nos étudiants
+          </h2>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-6">
+          {(cmsTestimonials?.length || 0) > 0 ? (
+            cmsTestimonials!.slice(0, 2).map((t: any) => (
+              <div class="p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-lg transition-shadow" style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.04)" }}>
+                <div class="flex items-center gap-2 mb-4">
+                  <Quote size={20} style={{ color: G }} />
+                </div>
+                <p class="text-gray-700 text-sm leading-relaxed mb-4" style={{ fontFamily: "'Inter', sans-serif" }}>"{t.quote}"</p>
+                <div class="flex items-center gap-3">
+                  {t.image && typeof t.image === 'object' && t.image.url && (
+                    <img src={t.image.url} alt={t.name} class="w-10 h-10 rounded-full object-cover" onerror="this.src='/images/placeholder.svg'; this.onerror=null;" />
+                  )}
+                  <div>
+                    <p class="font-bold text-gray-900 text-sm" style={{ fontFamily: "'Poppins', sans-serif" }}>{t.name}</p>
+                    <p class="text-xs text-gray-500" style={{ fontFamily: "'Inter', sans-serif" }}>{t.role}</p>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            [
+              { name: "Paola Essono", role: "Étudiante en BTS – 2ème année", quote: "La vie au CERIN c'est bien plus que les cours. J'ai découvert ma passion pour le théâtre dans notre club et j'ai développé une vraie confiance en moi." },
+              { name: "Jean-Luc Fouda", role: "Lycéen – Terminale C", quote: "Notre équipe de football a remporté le tournoi inter-lycées ! Le CERIN investit vraiment dans le sport et le bien-être de ses élèves." },
+            ].map((t, i) => (
+              <div key={i} class="p-6 rounded-2xl bg-white border border-gray-100">
+                <div class="flex items-center gap-2 mb-4">
+                  <Quote size={20} style={{ color: G }} />
+                </div>
+                <p class="text-gray-700 text-sm leading-relaxed mb-4" style={{ fontFamily: "'Inter', sans-serif" }}>"{t.quote}"</p>
+                <div class="flex items-center gap-3">
+                  <div>
+                    <p class="font-bold text-gray-900 text-sm" style={{ fontFamily: "'Poppins', sans-serif" }}>{t.name}</p>
+                    <p class="text-xs text-gray-500" style={{ fontFamily: "'Inter', sans-serif" }}>{t.role}</p>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="py-20" style={{ background: BG }}>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style={{ background: "white", color: G }}>Galerie</span>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4" style={{ fontFamily: "'Poppins', sans-serif" }}>
+            Moments de vie au CERIN
+          </h2>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {(galleryItems?.length || 0) > 0 ? (
+            galleryItems!.slice(0, 6).map((photo: any) => (
+              <div class="group relative rounded-2xl overflow-hidden bg-white border border-gray-100 hover:shadow-xl transition-shadow" style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.05)" }}>
+                <div class="relative h-56 overflow-hidden">
+                  <img src={photo.image?.url || '/images/placeholder.svg'} alt={photo.title} class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='/images/placeholder.svg'; this.onerror=null;" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <p class="text-white text-sm font-semibold" style="font-family: 'Poppins', sans-serif">{photo.title}</p>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            [
+              "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=600&q=80",
+              "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=600&q=80",
+              "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=600&q=80",
+            ].map((src, i) => (
+              <div key={i} class="group relative rounded-2xl overflow-hidden bg-white border border-gray-100">
+                <div class="relative h-56 overflow-hidden">
+                  <img src={src} alt={`Photo campus ${i + 1}`} class="w-full h-full object-cover" onerror="this.src='/images/placeholder.svg'; this.onerror=null;" />
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+        {(galleryItems?.length || 0) > 6 && (
+          <div class="text-center mt-10">
+            <a href="/galerie" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white" style={{ background: G, fontFamily: "'Poppins', sans-serif" }}>
+              Voir toute la galerie <span>→</span>
+            </a>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- Associations -->
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-4" style="font-family: 'Poppins', sans-serif">
+          Associations étudiantes
+        </h2>
+        <p class="text-gray-600 mb-8 max-w-2xl mx-auto" style="font-family: 'Inter', sans-serif">
+          Rejoignez nos associations et développez vos compétences extra-scolaires.
+        </p>
+        <div class="flex flex-wrap justify-center gap-3">
+          {[
+            "Bureau des Étudiants (BDE)",
+            "Club Informatique CERIN",
+            "Équipe Football CERIN",
+            "Club Théâtre & Expression",
+            "Association Humanitaire",
+            "Club Entrepreneuriat Jeunesse"
+          ].map((assoc) => (
+            <span class="px-4 py-2 rounded-full text-sm font-semibold border border-gray-200 text-gray-700" style={{ fontFamily: "'Inter', sans-serif" }}>{assoc}</span>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

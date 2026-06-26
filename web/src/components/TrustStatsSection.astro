@@ -1,0 +1,145 @@
+---
+import { Users, TrendingUp, Building2, Briefcase } from "lucide-react";
+
+interface Props {
+  variant?: "default" | "premium";
+  stats: {
+    value: number;
+    suffix: string;
+    label: string;
+    desc: string;
+  }[];
+}
+
+const { variant = "default", stats } = Astro.props;
+const isPremium = variant === "premium";
+
+const icons = [Users, TrendingUp, Briefcase, Building2];
+---
+
+<section 
+  class={`py-16 md:py-24 ${isPremium ? "bg-[#F5F6F8]" : "bg-white"}`}
+  aria-labelledby="trust-section-title"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 md:mb-16">
+      <div 
+        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-4"
+        style={`background: ${isPremium ? "white" : "#F0FAF0"}; color: #2EA82A; border: 1px solid #D1E8D1;`}
+      >
+        CERIN en chiffres
+      </div>
+      <h2 
+        id="trust-section-title"
+        class="text-gray-900 mb-4"
+        style={`font-family: 'Poppins', sans-serif; font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: ${isPremium ? 800 : 700};`}
+      >
+        {isPremium ? "Excellence Académique & Professionnelle" : "Des résultats qui font la différence"}
+      </h2>
+      <p 
+        class="text-gray-600 max-w-2xl mx-auto"
+        style="font-family: 'Inter', sans-serif"
+      >
+        {isPremium 
+          ? "Rejoignez une institution qui place la réussite et l'insertion de ses étudiants au cœur de son modèle pédagogique."
+          : "Notre engagement envers la réussite de chaque étudiant se reflète dans ces chiffres."
+        }
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {stats.map((stat, i) => {
+        const Icon = icons[i % icons.length];
+        return (
+          <div 
+            class="trust-card relative text-center p-8 rounded-2xl overflow-hidden group transition-all duration-300 hover:shadow-lg"
+            style="background: white; border: 1px solid #E5E7EB"
+            role="region"
+            aria-label={`${stat.label}: ${stat.value}${stat.suffix}`}
+          >
+            <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style="background: rgba(46,168,42,0.05)"></div>
+            
+            <div class="relative z-10">
+              <div 
+                class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4"
+                style="background: #F0FAF0"
+              >
+                <Icon size={28} style={{ color: "#2EA82A" }} />
+              </div>
+
+              <div 
+                class="stat-value text-gray-900 mb-2"
+                style="font-family: 'Poppins', sans-serif; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 800; line-height: 1"
+                data-value={stat.value}
+              >
+                0{stat.suffix}
+              </div>
+
+              <div class="text-gray-700 font-semibold mb-1" style="font-family: 'Poppins', sans-serif">
+                {stat.label}
+              </div>
+
+              <div class="text-gray-500 text-sm" style="font-family: 'Inter', sans-serif">
+                {stat.desc}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+
+    <div 
+      class="mt-12 md:mt-16 p-6 md:p-8 rounded-2xl text-center"
+      style={`background: ${isPremium ? "white" : "#F0FAF0"}; border: ${isPremium ? "1px solid #E5E7EB" : "none"}`}
+    >
+      <p 
+        class="text-gray-700 text-lg font-medium max-w-3xl mx-auto"
+        style="font-family: 'Poppins', sans-serif"
+      >
+        Le Groupe CERIN est accrédité par le Ministère de l'Enseignement Supérieur. L'excellence au service de l'insertion.
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  function setupCounters() {
+    const cards = document.querySelectorAll('.trust-card');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const valueEl = entry.target.querySelector('.stat-value');
+          if (!valueEl || valueEl.hasAttribute('data-animated')) return;
+          
+          valueEl.setAttribute('data-animated', 'true');
+          const target = parseInt(valueEl.getAttribute('data-value') || '0', 10);
+          const suffix = valueEl.innerHTML.replace(/[0-9]/g, '').trim();
+          
+          const duration = 2000;
+          const start = performance.now();
+          
+          function tick(now) {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const ease = 1 - Math.pow(1 - Math.min(progress, 1), 3);
+            const current = Math.floor(ease * target);
+            
+            if (valueEl) valueEl.textContent = current + suffix;
+            
+            if (progress < 1) requestAnimationFrame(tick);
+          }
+          
+          requestAnimationFrame(tick);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    cards.forEach(card => observer.observe(card));
+  }
+
+  // Support for Astro view transitions
+  document.addEventListener('astro:page-load', setupCounters);
+  if (document.readyState === 'complete') setupCounters();
+  else window.addEventListener('DOMContentLoaded', setupCounters);
+</script>

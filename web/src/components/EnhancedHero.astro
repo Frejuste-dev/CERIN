@@ -1,0 +1,174 @@
+---
+import { ArrowRight, Clock, CheckCircle } from "lucide-react";
+
+interface Props {
+  title: string;
+  subtitle: string;
+  ctaText1: string;
+  ctaText2: string;
+  image: string;
+}
+
+const { title, subtitle, ctaText1, ctaText2, image } = Astro.props;
+---
+
+<section
+  class="relative min-h-screen flex items-center overflow-hidden pt-20"
+  style="background: linear-gradient(150deg, #0F2010 0%, #1A3A1A 40%, #72CD00 100%)"
+>
+  {/* Decorative blobs */}
+  <div
+    class="absolute top-20 right-0 w-[600px] h-[600px] rounded-full opacity-10 blur-3xl pointer-events-none"
+    style="background: #FEFF01"
+  ></div>
+  <div
+    class="absolute bottom-0 left-[-100px] w-[400px] h-[400px] rounded-full opacity-10 blur-3xl pointer-events-none"
+    style="background: #FEFF01"
+  ></div>
+
+  {/* Grid pattern */}
+  <div
+    class="absolute inset-0 opacity-5"
+    style="background-image: linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px); background-size: 60px 60px"
+  ></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      {/* Left content */}
+      <div>
+        {/* Trust line */}
+        <div
+          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold mb-4"
+          style="background: rgba(245,200,0,0.15); color: #FEFF01; border: 1px solid rgba(245,200,0,0.4)"
+          role="region"
+          aria-label="Trust indicator"
+        >
+          <CheckCircle size={16} style={{ color: "#FEFF01" }} />
+          <span>5000+ étudiants formés | 92% taux de réussite</span>
+        </div>
+
+        {/* Main headline */}
+        <h1
+          class="text-white leading-tight mb-4"
+          style="font-family: 'Poppins', sans-serif; font-size: clamp(2.4rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.15"
+        >
+          {title.split('Groupe CERIN')[0]}<span style="color: #FEFF01">Groupe CERIN</span>{title.split('Groupe CERIN')[1]}
+        </h1>
+
+        {/* Urgency message */}
+        <div
+          class="flex items-center gap-2 mb-6 p-3 rounded-lg"
+          style="background: rgba(245,200,0,0.1)"
+          role="alert"
+          aria-live="polite"
+        >
+          <Clock size={18} style={{ color: "#FEFF01" }} />
+          <span class="text-green-100 text-sm font-medium">
+            Les inscriptions ferment le 31 mars 2025 • Moins de 15 places disponibles
+          </span>
+        </div>
+
+        <p class="text-green-100 text-lg leading-relaxed mb-10 max-w-lg" style="font-family: 'Inter', sans-serif">
+          {subtitle}
+        </p>
+
+        {/* CTA Buttons */}
+        <div class="flex flex-col sm:flex-row gap-4 mb-12">
+          <a
+            href="#apply"
+            class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-base transition-all duration-200 hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-offset-2"
+            style="background: #FEFF01; color: #0F2010; font-family: 'Poppins', sans-serif"
+            aria-label={ctaText1}
+          >
+            {ctaText1}
+            <ArrowRight size={20} />
+          </a>
+
+          <a
+            href="#programmes"
+            class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-base border-2 transition-all duration-200 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2"
+            style="border-color: rgba(255,255,255,0.4); color: white; font-family: 'Poppins', sans-serif"
+            aria-label={ctaText2}
+          >
+            {ctaText2}
+          </a>
+        </div>
+
+        {/* Mini stats */}
+        <div class="flex flex-wrap gap-8 pt-8 border-t border-white/20">
+          {[
+            { val: "4500+", label: "Étudiants" },
+            { val: "92%", label: "Réussite" },
+            { val: "60+", label: "Formations" },
+          ].map(({ val, label }) => (
+            <div class="flex flex-col">
+              <div class="text-white font-bold text-2xl" style="font-family: 'Poppins', sans-serif">
+                {val}
+              </div>
+              <div class="text-green-300 text-sm">{label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Right - visual card stack */}
+      <div class="hidden lg:block relative">
+        <div class="relative">
+          <div class="bg-white rounded-2xl p-6 shadow-2xl">
+            <img 
+              src={image}
+              alt="Étudiants du Groupe CERIN"
+              class="w-full h-56 object-cover rounded-xl mb-4"
+              onerror="this.src='/images/placeholder.svg'; this.onerror=null;"
+            />
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="font-semibold text-gray-800" style="font-family: 'Poppins', sans-serif">
+                  Campus Principal
+                </p>
+                <p class="text-sm text-gray-500">Côte d'Ivoire</p>
+              </div>
+              <div 
+                class="px-3 py-1 rounded-full text-xs font-semibold"
+                style="background: #F0FAF0; color: #72CD00"
+              >
+                Inscriptions ouvertes
+              </div>
+            </div>
+          </div>
+
+          {/* Floating badge */}
+          <div class="absolute -top-4 -right-4 bg-[#FEFF01] text-[#0F2010] rounded-2xl px-5 py-3 shadow-lg animate-pulse">
+            <div class="text-2xl font-black" style="font-family: 'Poppins', sans-serif">
+              15
+            </div>
+            <div class="text-xs font-semibold">Places restantes</div>
+          </div>
+
+          {/* Bottom floating card */}
+          <div class="absolute -bottom-6 -left-6 bg-[#1A3A1A] text-white rounded-2xl px-5 py-4 shadow-xl flex items-center gap-3">
+            <div 
+              class="w-10 h-10 rounded-full flex items-center justify-center"
+              style="background: #72CD00"
+            >
+              <CheckCircle size={20} style={{ color: "white" }} />
+            </div>
+            <div>
+              <div class="font-bold text-sm" style="font-family: 'Poppins', sans-serif">
+                250+ Diplômés
+              </div>
+              <div class="text-xs text-green-300">Promotion 2024</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Wave divider */}
+  <div class="absolute bottom-0 left-0 right-0">
+    <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" class="w-full">
+      <path d="M0 80L1440 80L1440 20C1200 70 960 0 720 40C480 80 240 10 0 50L0 80Z" fill="white" />
+    </svg>
+  </div>
+</section>

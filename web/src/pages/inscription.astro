@@ -1,0 +1,161 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import PageHero from "../components/shared/PageHero.astro";
+import { GraduationCap, BookOpen, Award, CheckCircle, Download } from "lucide-react";
+import { getPrograms } from "../lib/content";
+
+const G = "#7AC943";
+const Y = "#F4D000";
+const BG = "#F5F6F8";
+
+const steps = [
+  { title: "Choisissez votre formation", desc: "Parcourez nos programmes du collège au Master et sélectionnez celui qui correspond à votre projet.", icon: BookOpen },
+  { title: "Remplissez le formulaire", desc: "Renseignez vos informations personnelles, votre parcours et vos motivations en ligne.", icon: GraduationCap },
+  { title: "Transmettez votre dossier", desc: "Ajoutez les documents requis : bulletins, pièce d'identité, attestations et diplômes.", icon: Award },
+  { title: "Confirmez votre inscription", desc: "Notre équipe étudie votre dossier et vous confirme l'admission sous 48 heures.", icon: CheckCircle },
+];
+
+const { data: programs } = await getPrograms({
+  filters: { category: { $ne: "" } },
+  sort: ['category:asc', 'title:asc'],
+  populate: '*',
+});
+
+const levelMap: Record<string, { level: string; cycle: string; tag: string }> = {
+  "Collège": { level: "Collège & Lycée", cycle: "6ème → Terminale", tag: "Fondamental" },
+  "Lycée": { level: "Collège & Lycée", cycle: "6ème → Terminale", tag: "Fondamental" },
+  "Bac+2": { level: "BTS", cycle: "Bac +2", tag: "Professionnel" },
+  "Bac+3": { level: "Licence / Bachelor", cycle: "Bac +3", tag: "Supérieur" },
+  "Bac+5": { level: "Master", cycle: "Bac +5", tag: "Expertise" },
+};
+
+function getProgramLevel(program: any) {
+  const duration = program.duration || "";
+  const level = program.level || "";
+  if (duration.includes("4 ans") || level.toLowerCase().includes("collège") || level.toLowerCase().includes("lycée")) return "Collège & Lycée";
+  if (duration.includes("2 ans") && level.toLowerCase().includes("bac+2")) return "BTS";
+  if (duration.includes("3 ans") || level.toLowerCase().includes("bac+3")) return "Licence / Bachelor";
+  if (duration.includes("5 ans") || level.toLowerCase().includes("bac+5")) return "Master";
+  return level;
+}
+---
+
+<Layout title="Inscription – Groupe CERIN">
+  <Header />
+  <main class="pt-20">
+    <PageHero
+      title="Inscription"
+      subtitle="Rejoignez le Groupe CERIN et construisez votre avenir académique en quelques étapes simples."
+      image="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80"
+      breadcrumbs={[{ label: "Inscription" }]}
+      accent={Y}
+    />
+
+    <section class="py-20" style={{ background: BG }}>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style={{ background: "white", color: G }}>
+            Procédure d'inscription
+          </span>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4" style="font-family: 'Poppins', sans-serif">
+            4 étapes pour intégrer le CERIN
+          </h2>
+          <p class="text-gray-600 max-w-2xl mx-auto" style="font-family: 'Inter', sans-serif">
+            Notre équipe vous accompagne à chaque étape pour rendre votre inscription simple et rapide.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+          {steps.map((s) => {
+            const Icon = s.icon;
+            return (
+              <div class="bg-white p-6 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow" style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.05)" }}>
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: "#F0FAF0" }}>
+                  <Icon size={24} style={{ color: G }} />
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2" style="font-family: 'Poppins', sans-serif">{s.title}</h3>
+                <p class="text-sm text-gray-600" style="font-family: 'Inter', sans-serif">{s.desc}</p>
+              </div>
+            );
+          })}
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-6" style="font-family: 'Poppins', sans-serif">
+              Nos programmes disponibles
+            </h2>
+            <p class="text-gray-600 mb-8" style="font-family: 'Inter', sans-serif">
+              Du collège au Master, le Groupe CERIN propose des formations reconnues par l'État, adaptées aux ambitions de chaque étudiant.
+            </p>
+            <div class="space-y-4">
+              {(programs?.length || 0) > 0 ? (
+                programs!.slice(0, 4).map((p: any) => (
+                  <a href="/formations/enseignement-superieur" class="flex items-center justify-between p-4 rounded-xl border border-gray-200 hover:border-green-300 hover:shadow-md transition-all bg-white">
+                    <div>
+                      <p class="font-bold text-gray-900" style="font-family: 'Poppins', sans-serif">{getProgramLevel(p)}</p>
+                      <p class="text-xs text-gray-500" style="font-family: 'Inter', sans-serif">{p.duration}</p>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: "#F0FAF0", color: G }}>Disponible</span>
+                  </a>
+                ))
+              ) : (
+                [
+                  { level: "Collège & Lycée", cycle: "6ème → Terminale", tag: "Fondamental" },
+                  { level: "BTS", cycle: "Bac +2", tag: "Professionnel" },
+                  { level: "Licence / Bachelor", cycle: "Bac +3", tag: "Supérieur" },
+                  { level: "Master", cycle: "Bac +5", tag: "Expertise" },
+                ].map((p) => (
+                  <a href="/formations/enseignement-superieur" class="flex items-center justify-between p-4 rounded-xl border border-gray-200 hover:border-green-300 hover:shadow-md transition-all bg-white">
+                    <div>
+                      <p class="font-bold text-gray-900" style="font-family: 'Poppins', sans-serif">{p.level}</p>
+                      <p class="text-xs text-gray-500" style="font-family: 'Inter', sans-serif">{p.cycle}</p>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: "#F0FAF0", color: G }}>{p.tag}</span>
+                  </a>
+                ))
+              )}
+            </div>
+          </div>
+          <div class="bg-white p-8 rounded-3xl border border-gray-100" style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.08)" }}>
+            <h3 class="text-xl font-bold text-gray-900 mb-4" style="font-family: 'Poppins', sans-serif">Documents à préparer</h3>
+            <ul class="space-y-3 mb-8">
+              {["Bulletins scolaires des 2 dernières années", "Copie de l'acte de naissance", "Copie de la CNI ou passeport", "Certificat de résidence", "Photos d'identité (4 copies)", "Diplôme précédent (si applicable)"].map((d) => (
+                <li class="flex items-start gap-3 text-sm text-gray-700" style={{ fontFamily: "'Inter', sans-serif" }}>
+                  <CheckCircle size={16} class="shrink-0 mt-0.5" style={{ color: G }} />
+                  {d}
+                </li>
+              ))}
+            </ul>
+            <a href="/admissions" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white transition-all hover:shadow-lg hover:-translate-y-0.5" style={{ background: G, fontFamily: "'Poppins', sans-serif" }}>
+              <Download size={18} />
+              Déposer ma candidature
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4" style="font-family: 'Poppins', sans-serif">
+          Besoin d'aide pour votre inscription ?
+        </h2>
+        <p class="text-gray-600 max-w-2xl mx-auto mb-8" style="font-family: 'Inter', sans-serif">
+          Notre service des admissions est disponible pour répondre à toutes vos questions et vous guider pas à pas.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="/contact" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-white transition-all hover:shadow-lg hover:-translate-y-0.5" style={{ background: G, fontFamily: "'Poppins', sans-serif" }}>
+            Contacter l'admission
+          </a>
+          <a href="tel:+2250102555550" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold border-2 transition-all hover:bg-gray-50" style={{ border: "2px solid #E5E7EB", color: "#374151", fontFamily: "'Poppins', sans-serif" }}>
+            +225 01 02 55 55 50
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
